@@ -1,0 +1,43 @@
+{
+  "name": "markerjs",
+  "version": "1.0.0",
+  "description": "Annotate and mark images",
+  "main": "markerjs.umd.js",
+  "module": "markerjs.esm.js",
+  "types": "typings/index.d.ts",
+  "scripts": {
+    "test": "mocha --require ts-node/register test/**/*.ts",
+    "build": "rollup --config rollup.config.prod.js",
+    "dev": "rollup --config rollup.config.dev.js -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ailon/markerjs"
+  },
+  "keywords": [
+    "annotate", "mark", "highlight", "image", "photo", "comment"
+  ],
+  "author": "Alan Mendelevich",
+  "license": "Linkware (see LICENSE)",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "rollup": "^0.67.3",
+    "rollup-plugin-cpy": "^1.1.0",
+    "rollup-plugin-delete": "^0.1.2",
+    "rollup-plugin-generate-html-template": "^1.1.0",
+    "rollup-plugin-generate-package-json": "^2.1.1",
+    "rollup-plugin-livereload": "^0.6.0",
+    "rollup-plugin-postcss": "^1.6.3",
+    "rollup-plugin-serve": "^0.6.0",
+    "rollup-plugin-svgo": "^1.0.2",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.18.0",
+    "tslib": "^1.9.3",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "lib": ["es2015", "dom"],
+        "target": "es5",
+        "declaration": true,
+        "declarationDir": "./dist/typings/",
+        "downlevelIteration": true,
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

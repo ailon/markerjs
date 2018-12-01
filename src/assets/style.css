@@ -1,0 +1,67 @@
+.markerjs-logo {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+
+    fill: #333333;
+}
+
+.markerjs-logo a {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    padding: 3px;
+    width: 20px;
+    height: 20px;
+}
+
+.markerjs-logo a:hover {
+    fill: #ff8080;
+}
+
+.markerjs-toolbar {
+    background-color: #cccccc;
+    padding: 0px 5px;
+    margin: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    display: grid;
+    grid-template-columns: repeat(20, auto);
+}
+
+
+.markerjs-toolbar-button, .markerjs-toolbar-logo a {
+    display: inline-block;
+    margin: 2px;
+    padding: 3px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    border-bottom: transparent solid 1px;
+    border-right: transparent solid 1px;
+
+
+    fill: #333333;
+
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.markerjs-toolbar-separator {
+    margin: 5px 5px;
+    border: 1px solid #dddddd;
+}
+
+.markerjs-toolbar-button:hover, .markerjs-toolbar-logo a:hover {
+    background-color: #eeeeee;
+    background: radial-gradient(#eeeeee, #cccccc);
+
+    fill: #ff8080;
+}
+
+.markerjs-toolbar-button svg {
+    height: 16px;
+}

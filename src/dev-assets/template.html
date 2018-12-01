@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello, World!</title>
+
+    <style>
+        html, body {
+            background-color: #eeeeff;
+            padding: 30px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        });        
+
+        function showMarker(img) {
+            let x = new markerjs.MarkerArea(img);
+            // markerjs.Activator.key = "AB3-123C-T45";
+            x.show((dataUrl) => {
+                const res = document.getElementById("resultImage");
+                res.src = dataUrl;
+                res.style.display = "";
+            });
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>HTML Ipsum Presents</h1>
+
+    <button onclick="showMarker(document.getElementById('bannerImage'));">render</button>
+
+    <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam
+        egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et
+        sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit
+        amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus
+        enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+
+    <img id="bannerImage" crossorigin="anonymous" src="https://tinygoodies.com/ads/images/get-my-book-now-1200x900.jpg" style="max-width: 600px;" alt="img" />
+
+    <br /><br />
+
+    <img id="testImage" src="./test-image.jpg" style="max-width: 800px;" alt="img" onclick="showMarker(this);" />
+
+    <h2>Result</h2>
+
+    <img id="resultImage" src="" alt="result img" style="display: none;" />
+
+
+    <h2>Header Level 2</h2>
+
+    <ol>
+        <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li>Aliquam tincidunt mauris eu risus.</li>
+    </ol>
+
+    <blockquote>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue.
+            Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus
+            est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p>
+    </blockquote>
+
+    <h3>Header Level 3</h3>
+
+    <ul>
+        <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+        <li>Aliquam tincidunt mauris eu risus.</li>
+    </ul>
+
+    <pre><code>
+    #header h1 a {
+      display: block;
+      width: 300px;
+      height: 80px;
+    }
+    </code></pre>
+</body>
+
+</html>
