@@ -1,6 +1,6 @@
 {
   "name": "markerjs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Annotate and mark images",
   "main": "markerjs.umd.js",
   "module": "markerjs.esm.js",
@@ -15,7 +15,12 @@
     "url": "https://github.com/ailon/markerjs"
   },
   "keywords": [
-    "annotate", "mark", "highlight", "image", "photo", "comment"
+    "annotate",
+    "mark",
+    "highlight",
+    "image",
+    "photo",
+    "comment"
   ],
   "author": "Alan Mendelevich",
   "license": "Linkware (see LICENSE)",
