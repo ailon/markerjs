@@ -25,6 +25,7 @@ export class MarkerArea {
     private markerImage: SVGSVGElement;
     private defs: SVGDefsElement;
 
+    private targetRect: DOMRect;
     private width: number;
     private height: number;
 
@@ -91,6 +92,10 @@ export class MarkerArea {
         this.completeCallback = completeCallback;
         this.cancelCallback = cancelCallback;
 
+        const targetRect = this.target.getBoundingClientRect() as DOMRect;
+        const bodyRect = document.body.getBoundingClientRect();
+        this.targetRect = new DOMRect(targetRect.left - bodyRect.left, targetRect.top - bodyRect.top);
+
         this.initMarkerCanvas();
         this.attachEvents();
         this.setStyles();
@@ -152,13 +157,13 @@ export class MarkerArea {
         this.markerImage.style.position = "absolute";
         this.markerImage.style.width = this.width + "px";
         this.markerImage.style.height = this.height + "px";
-        this.markerImage.style.top = this.target.offsetTop + "px";
-        this.markerImage.style.left = this.target.offsetLeft + "px";
+        this.markerImage.style.top = this.targetRect.top + "px";
+        this.markerImage.style.left = this.targetRect.left + "px";
 
         this.defs = SvgHelper.createDefs();
         this.markerImage.appendChild(this.defs);
 
-        this.target.parentElement.appendChild(this.markerImage);
+        document.body.appendChild(this.markerImage);
     }
 
     private showUI = () => {
@@ -166,9 +171,9 @@ export class MarkerArea {
         this.toolbarUI = this.toolbar.getUI();
         document.body.appendChild(this.toolbarUI);
         this.toolbarUI.style.position = "absolute";
-        this.toolbarUI.style.left = `${(this.target.offsetLeft
+        this.toolbarUI.style.left = `${(this.targetRect.left
             + this.target.offsetWidth - this.toolbarUI.clientWidth)}px`;
-        this.toolbarUI.style.top = `${this.target.offsetTop - this.toolbarUI.clientHeight}px`;
+        this.toolbarUI.style.top = `${this.targetRect.top - this.toolbarUI.clientHeight}px`;
 
         this.markerAreaBorder = SvgHelper.createRect(
             this.width, this.height,
@@ -337,8 +342,8 @@ export class MarkerArea {
         document.body.appendChild(this.logoUI);
 
         this.logoUI.style.position = "absolute";
-        this.logoUI.style.left = `${(this.target.offsetLeft + 10)}px`;
-        this.logoUI.style.top = `${this.target.offsetTop + this.target.offsetHeight
+        this.logoUI.style.left = `${(this.targetRect.left + 10)}px`;
+        this.logoUI.style.top = `${this.targetRect.top + this.target.offsetHeight
             - this.logoUI.clientHeight - 10}px`;
     }
 
