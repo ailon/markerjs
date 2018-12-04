@@ -4,11 +4,7 @@ export class Renderer {
         canvas.width = markerImage.width.baseVal.value;
         canvas.height = markerImage.height.baseVal.value;
 
-        const mi = markerImage.cloneNode(true) as SVGSVGElement;
-        mi.style.left = "0px";
-        mi.style.top = "0px";
-
-        const data = mi.outerHTML;
+        const data = markerImage.outerHTML;
 
         const ctx = canvas.getContext("2d");
         ctx.drawImage(target, 0, 0, canvas.width, canvas.height);

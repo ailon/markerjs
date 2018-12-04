@@ -23,6 +23,7 @@ import Logo from "./assets/markerjs-logo-m.svg";
 export class MarkerArea {
     private target: HTMLImageElement;
     private markerImage: SVGSVGElement;
+    private markerImageHolder: HTMLDivElement;
     private defs: SVGDefsElement;
 
     private targetRect: ClientRect;
@@ -109,7 +110,7 @@ export class MarkerArea {
     public close = () => {
         if (this.toolbarUI && this.markerImage) {
             document.body.removeChild(this.toolbarUI);
-            document.body.removeChild(this.markerImage);
+            document.body.removeChild(this.markerImageHolder);
         }
         if (this.logoUI) {
             document.body.removeChild(this.logoUI);
@@ -149,22 +150,26 @@ export class MarkerArea {
     }
 
     private initMarkerCanvas = () => {
+        this.markerImageHolder = document.createElement("div");
+
         this.markerImage = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.markerImage.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         this.markerImage.setAttribute("width", this.width.toString());
         this.markerImage.setAttribute("height", this.height.toString());
         this.markerImage.setAttribute("viewBox", "0 0 " + this.width.toString() + " " + this.height.toString());
 
-        this.markerImage.style.position = "absolute";
-        this.markerImage.style.width = this.width + "px";
-        this.markerImage.style.height = this.height + "px";
-        this.markerImage.style.top = this.targetRect.top + "px";
-        this.markerImage.style.left = this.targetRect.left + "px";
+        this.markerImageHolder.style.position = "absolute";
+        this.markerImageHolder.style.width = this.width + "px";
+        this.markerImageHolder.style.height = this.height + "px";
+        this.markerImageHolder.style.top = this.targetRect.top + "px";
+        this.markerImageHolder.style.left = this.targetRect.left + "px";
 
         this.defs = SvgHelper.createDefs();
         this.markerImage.appendChild(this.defs);
 
-        document.body.appendChild(this.markerImage);
+        this.markerImageHolder.appendChild(this.markerImage);
+
+        document.body.appendChild(this.markerImageHolder);
     }
 
     private showUI = () => {
@@ -262,7 +267,7 @@ export class MarkerArea {
             const y = this.height / 2 - bbox.height / 2;
 
             const translate = marker.visual.transform.baseVal.getItem(0);
-            translate.setTranslate(x, y);
+            translate.setMatrix(translate.matrix.translate(x, y));
             marker.visual.transform.baseVal.replaceItem(translate, 0);
 
         } else {
