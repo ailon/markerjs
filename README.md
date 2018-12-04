@@ -18,7 +18,7 @@ To enable image annotation in your project follow these 3 simple steps:
 
 ## Example
 
-```
+```js
 import { MarkerArea } from 'markerjs';
 
 const m = new MarkerArea(document.getElementById('imageToAnnotate'));
@@ -29,6 +29,10 @@ m.show(
     }
 );
 ```
+
+## Credits
+
+marker.js is using [Font Awesome Free](https://fontawesome.com) icons for the toolbar UI.
 
 ## License
 Linkware (see LICENSE for details) - the UI displays a small link back to the marker.js website which should be retained. Alternative license options are coming soon.
