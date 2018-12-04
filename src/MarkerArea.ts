@@ -25,7 +25,7 @@ export class MarkerArea {
     private markerImage: SVGSVGElement;
     private defs: SVGDefsElement;
 
-    private targetRect: DOMRect;
+    private targetRect: ClientRect;
     private width: number;
     private height: number;
 
@@ -93,8 +93,9 @@ export class MarkerArea {
         this.cancelCallback = cancelCallback;
 
         const targetRect = this.target.getBoundingClientRect() as DOMRect;
-        const bodyRect = document.body.getBoundingClientRect();
-        this.targetRect = new DOMRect(targetRect.left - bodyRect.left, targetRect.top - bodyRect.top);
+        const bodyRect = document.body.parentElement.getBoundingClientRect();
+        this.targetRect = { left: (targetRect.left - bodyRect.left),
+            top: (targetRect.top - bodyRect.top) } as ClientRect;
 
         this.initMarkerCanvas();
         this.attachEvents();
