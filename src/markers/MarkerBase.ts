@@ -22,16 +22,21 @@ export class MarkerBase {
 
     private isDragging: boolean = false;
 
+    private previousMouseX: number = 0;
+    private previousMouseY: number = 0;
+
     // constructor() {
     // }
 
     public manipulate = (ev: MouseEvent) => {
         if (this.isDragging) {
-            this.move(ev.movementX, ev.movementY);
+            this.move(ev.screenX - this.previousMouseX, ev.screenY - this.previousMouseY);
         }
         if (this.isResizing) {
-            this.resize(ev.movementX, ev.movementY);
+            this.resize(ev.screenX - this.previousMouseX, ev.screenY - this.previousMouseY);
         }
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
     }
 
     public endManipulation() {
@@ -60,6 +65,9 @@ export class MarkerBase {
         this.visual.addEventListener("mousedown", this.mouseDown);
         this.visual.addEventListener("mouseup", this.mouseUp);
         this.visual.addEventListener("mousemove", this.mouseMove);
+        this.visual.addEventListener("touchstart", this.touch, { passive: false });
+        this.visual.addEventListener("touchend", this.touch, { passive: false });
+        this.visual.addEventListener("touchmove", this.touch, { passive: false });
 
         this.renderVisual = SvgHelper.createGroup([["class", "render-visual"]]);
         this.visual.appendChild(this.renderVisual);
@@ -81,6 +89,8 @@ export class MarkerBase {
         ev.stopPropagation();
         this.select();
         this.isDragging = true;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
     }
     private mouseUp = (ev: MouseEvent) => {
         ev.stopPropagation();
@@ -89,6 +99,30 @@ export class MarkerBase {
     private mouseMove = (ev: MouseEvent) => {
         ev.stopPropagation();
         this.manipulate(ev);
+    }
+
+    private touch = (ev: TouchEvent) => {
+        ev.preventDefault();
+        const newEvt = document.createEvent("MouseEvents");
+        const touch = ev.changedTouches[0];
+        let type = null;
+
+        switch (ev.type) {
+          case "touchstart":
+            type = "mousedown";
+            break;
+          case "touchmove":
+            type = "mousemove";
+            break;
+          case "touchend":
+            type = "mouseup";
+            break;
+        }
+
+        newEvt.initMouseEvent(type, true, true, window, 0,
+            touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+            ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey, 0, null);
+        ev.target.dispatchEvent(newEvt);
     }
 
     private move = (dx: number, dy: number) => {
