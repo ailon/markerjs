@@ -93,10 +93,7 @@ export class MarkerArea {
         this.completeCallback = completeCallback;
         this.cancelCallback = cancelCallback;
 
-        const targetRect = this.target.getBoundingClientRect() as DOMRect;
-        const bodyRect = document.body.parentElement.getBoundingClientRect();
-        this.targetRect = { left: (targetRect.left - bodyRect.left),
-            top: (targetRect.top - bodyRect.top) } as ClientRect;
+        this.setTargetRect();
 
         this.initMarkerCanvas();
         this.attachEvents();
@@ -105,6 +102,8 @@ export class MarkerArea {
         if (!Activator.isLicensed) {
             this.adLogo();
         }
+
+        window.addEventListener("resize", this.positionUI);
     }
 
     public close = () => {
@@ -115,6 +114,14 @@ export class MarkerArea {
         if (this.logoUI) {
             document.body.removeChild(this.logoUI);
         }
+    }
+
+    private setTargetRect = () => {
+        const targetRect = this.target.getBoundingClientRect() as DOMRect;
+        const bodyRect = document.body.parentElement.getBoundingClientRect();
+        this.targetRect = { left: (targetRect.left - bodyRect.left),
+            top: (targetRect.top - bodyRect.top) } as ClientRect;
+
     }
 
     private render = (done: (dataUrl: string) => void) => {
@@ -163,8 +170,7 @@ export class MarkerArea {
         this.markerImageHolder.style.position = "absolute";
         this.markerImageHolder.style.width = this.width + "px";
         this.markerImageHolder.style.height = this.height + "px";
-        this.markerImageHolder.style.top = this.targetRect.top + "px";
-        this.markerImageHolder.style.left = this.targetRect.left + "px";
+        this.positionMarkerImage();
 
         this.defs = SvgHelper.createDefs();
         this.markerImage.appendChild(this.defs);
@@ -174,15 +180,32 @@ export class MarkerArea {
         document.body.appendChild(this.markerImageHolder);
     }
 
+    private positionUI = () => {
+        this.setTargetRect();
+        this.positionMarkerImage();
+        this.positionToolbar();
+        if (this.logoUI) {
+            this.positionLogo();
+        }
+    }
+
+    private positionMarkerImage = () => {
+        this.markerImageHolder.style.top = this.targetRect.top + "px";
+        this.markerImageHolder.style.left = this.targetRect.left + "px";
+    }
+
+    private positionToolbar = () => {
+        this.toolbarUI.style.left = `${(this.targetRect.left
+            + this.target.offsetWidth - this.toolbarUI.clientWidth)}px`;
+        this.toolbarUI.style.top = `${this.targetRect.top - this.toolbarUI.clientHeight}px`;
+    }
+
     private showUI = () => {
         this.toolbar = new Toolbar(this.toolbars, this.toolbarClick);
         this.toolbarUI = this.toolbar.getUI();
         document.body.appendChild(this.toolbarUI);
         this.toolbarUI.style.position = "absolute";
-        this.toolbarUI.style.left = `${(this.targetRect.left
-            + this.target.offsetWidth - this.toolbarUI.clientWidth)}px`;
-        this.toolbarUI.style.top = `${this.targetRect.top - this.toolbarUI.clientHeight}px`;
-
+        this.positionToolbar();
         this.markerAreaBorder = SvgHelper.createRect(
             this.width, this.height,
             [
@@ -332,6 +355,14 @@ export class MarkerArea {
         this.completeCallback(dataUrl);
     }
 
+    private positionLogo = () => {
+        if (this.logoUI) {
+            this.logoUI.style.left = `${(this.targetRect.left + 10)}px`;
+            this.logoUI.style.top = `${this.targetRect.top + this.target.offsetHeight
+                - this.logoUI.clientHeight - 10}px`;
+        }
+    }
+
     private adLogo = () => {
         this.logoUI = document.createElement("div");
         this.logoUI.className = "markerjs-logo";
@@ -350,9 +381,7 @@ export class MarkerArea {
         document.body.appendChild(this.logoUI);
 
         this.logoUI.style.position = "absolute";
-        this.logoUI.style.left = `${(this.targetRect.left + 10)}px`;
-        this.logoUI.style.top = `${this.targetRect.top + this.target.offsetHeight
-            - this.logoUI.clientHeight - 10}px`;
+        this.positionLogo();
     }
 
 }
