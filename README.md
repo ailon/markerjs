@@ -35,4 +35,6 @@ m.show(
 marker.js is using [Font Awesome Free](https://fontawesome.com) icons for the toolbar UI.
 
 ## License
-Linkware (see LICENSE for details) - the UI displays a small link back to the marker.js website which should be retained. Alternative license options are coming soon.
+Linkware (see [LICENSE](https://github.com/ailon/markerjs/blob/master/LICENSE) for details) - the UI displays a small link back to the marker.js website which should be retained. Alternative license options are coming soon.
+
+Alternative licenses are available through the [marker.js website](https://markerjs.com).
