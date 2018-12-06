@@ -369,9 +369,6 @@ export class MarkerArea {
 
         const link = document.createElement("a");
         link.href = "https://markerjs.com/";
-        if (window.location.hostname === "localhost") {
-            link.href += "remove-logo/";
-        }
         link.target = "_blank";
         link.innerHTML = Logo;
         link.title = "Powered by marker.js";
