@@ -80,6 +80,8 @@ export class MarkerArea {
         },
     ];
 
+    private scale = 1.0;
+
     constructor(target: HTMLImageElement) {
         this.target = target;
         this.width = target.clientWidth;
@@ -103,7 +105,7 @@ export class MarkerArea {
             this.adLogo();
         }
 
-        window.addEventListener("resize", this.positionUI);
+        window.addEventListener("resize", this.adjustUI);
     }
 
     public close = () => {
@@ -170,6 +172,7 @@ export class MarkerArea {
         this.markerImageHolder.style.position = "absolute";
         this.markerImageHolder.style.width = this.width + "px";
         this.markerImageHolder.style.height = this.height + "px";
+        this.markerImageHolder.style.transformOrigin = "top left";
         this.positionMarkerImage();
 
         this.defs = SvgHelper.createDefs();
@@ -178,6 +181,26 @@ export class MarkerArea {
         this.markerImageHolder.appendChild(this.markerImage);
 
         document.body.appendChild(this.markerImageHolder);
+    }
+
+    private adjustUI = (ev: UIEvent) => {
+        this.adjustSize();
+        this.positionUI();
+    }
+
+    private adjustSize = () => {
+        this.width = this.target.clientWidth;
+        this.height = this.target.clientHeight;
+
+        const scale = this.target.clientWidth / this.markerImageHolder.clientWidth;
+        if (scale !== 1.0) {
+            this.scale *= scale;
+            this.markerImageHolder.style.width = `${this.width}px`;
+            this.markerImageHolder.style.height = `${this.height}px`;
+
+            this.markerImageHolder.style.transform = `scale(${this.scale})`;
+        }
+
     }
 
     private positionUI = () => {
