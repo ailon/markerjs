@@ -8,7 +8,9 @@
   "scripts": {
     "test": "mocha --require ts-node/register test/**/*.ts",
     "build": "rollup --config rollup.config.prod.js",
-    "dev": "rollup --config rollup.config.dev.js -w"
+    "dev": "rollup --config rollup.config.dev.js -w",
+    "prepublish": "npm run build",
+    "publish": "npm publish ./dist/"
   },
   "repository": {
     "type": "git",
