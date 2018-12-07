@@ -1,13 +1,13 @@
 import commoncfg from './rollup.config.common';
-import htmlTemplate from 'rollup-plugin-generate-html-template';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
 import copy from 'rollup-plugin-cpy';
+import staticSite from 'rollup-plugin-static-site';
 
 commoncfg[0].plugins.push(
-    htmlTemplate({
-        template: 'src/dev-assets/template.html',
-        target: 'index.html',
+    staticSite({
+        template: { path: 'src/dev-assets/template.html' },
+        dir: 'dist'
     }),
     copy({
         files: ['src/dev-assets/*.jpg'],
