@@ -311,8 +311,8 @@ export class MarkerArea {
             this.markerImage.appendChild(marker.visual);
 
             const bbox = marker.visual.getBBox();
-            const x = this.width / 2 - bbox.width / 2;
-            const y = this.height / 2 - bbox.height / 2;
+            const x = this.width / 2 / this.scale - bbox.width / 2;
+            const y = this.height / 2 / this.scale - bbox.height / 2;
 
             const translate = marker.visual.transform.baseVal.getItem(0);
             translate.setMatrix(translate.matrix.translate(x, y));

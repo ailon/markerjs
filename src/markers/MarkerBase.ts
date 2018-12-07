@@ -29,11 +29,15 @@ export class MarkerBase {
     // }
 
     public manipulate = (ev: MouseEvent) => {
+        const scale = this.visual.getScreenCTM().a;
+        const dx = (ev.screenX - this.previousMouseX) / scale;
+        const dy = (ev.screenY - this.previousMouseY) / scale;
+
         if (this.isDragging) {
-            this.move(ev.screenX - this.previousMouseX, ev.screenY - this.previousMouseY);
+            this.move(dx, dy);
         }
         if (this.isResizing) {
-            this.resize(ev.screenX - this.previousMouseX, ev.screenY - this.previousMouseY);
+            this.resize(dx, dy);
         }
         this.previousMouseX = ev.screenX;
         this.previousMouseY = ev.screenY;
