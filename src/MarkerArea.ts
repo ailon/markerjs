@@ -273,6 +273,9 @@ export class MarkerArea {
             }
             .text-marker text {
                 fill: #ff0000;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+                    "Segoe UI Emoji", "Segoe UI Symbol";
             }
             .markerjs-rect-control-box .markerjs-rect-control-rect {
                 stroke: black;
