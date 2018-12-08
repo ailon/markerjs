@@ -14,9 +14,10 @@ export class TextMarker extends RectangularMarkerBase {
     protected readonly MIN_SIZE = 50;
 
     private readonly DEFAULT_TEXT = "Double-click to edit text";
-    private isNew = true;
     private text: string = this.DEFAULT_TEXT;
     private textElement: SVGTextElement;
+
+    private inDoubleTap = false;
 
     private editor: HTMLDivElement;
 
@@ -34,6 +35,7 @@ export class TextMarker extends RectangularMarkerBase {
         this.renderText();
 
         this.visual.addEventListener("dblclick", this.onDblClick);
+        this.visual.addEventListener("touchstart", this.onTap);
 
     }
 
@@ -80,6 +82,16 @@ export class TextMarker extends RectangularMarkerBase {
 
     private onDblClick = (ev: MouseEvent) => {
         this.showEditor();
+    }
+
+    private onTap = (ev: TouchEvent) => {
+        if (this.inDoubleTap) {
+            this.inDoubleTap = false;
+            this.showEditor();
+        } else {
+            this.inDoubleTap = true;
+            setTimeout(() => { this.inDoubleTap = false; }, 300);
+        }
     }
 
     private showEditor = () => {
