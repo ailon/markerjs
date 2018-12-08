@@ -20,10 +20,10 @@ export class MarkerBase {
     protected isActive: boolean = true;
     protected isResizing: boolean = false;
 
-    private isDragging: boolean = false;
+    protected previousMouseX: number = 0;
+    protected previousMouseY: number = 0;
 
-    private previousMouseX: number = 0;
-    private previousMouseY: number = 0;
+    private isDragging: boolean = false;
 
     // constructor() {
     // }
@@ -45,6 +45,7 @@ export class MarkerBase {
 
     public endManipulation() {
         this.isDragging = false;
+        this.isResizing = false;
     }
 
     public select() {
@@ -69,9 +70,9 @@ export class MarkerBase {
         this.visual.addEventListener("mousedown", this.mouseDown);
         this.visual.addEventListener("mouseup", this.mouseUp);
         this.visual.addEventListener("mousemove", this.mouseMove);
-        this.visual.addEventListener("touchstart", this.touch, { passive: false });
-        this.visual.addEventListener("touchend", this.touch, { passive: false });
-        this.visual.addEventListener("touchmove", this.touch, { passive: false });
+        this.visual.addEventListener("touchstart", this.onTouch, { passive: false });
+        this.visual.addEventListener("touchend", this.onTouch, { passive: false });
+        this.visual.addEventListener("touchmove", this.onTouch, { passive: false });
 
         this.renderVisual = SvgHelper.createGroup([["class", "render-visual"]]);
         this.visual.appendChild(this.renderVisual);
@@ -89,23 +90,7 @@ export class MarkerBase {
         return;
     }
 
-    private mouseDown = (ev: MouseEvent) => {
-        ev.stopPropagation();
-        this.select();
-        this.isDragging = true;
-        this.previousMouseX = ev.screenX;
-        this.previousMouseY = ev.screenY;
-    }
-    private mouseUp = (ev: MouseEvent) => {
-        ev.stopPropagation();
-        this.endManipulation();
-    }
-    private mouseMove = (ev: MouseEvent) => {
-        ev.stopPropagation();
-        this.manipulate(ev);
-    }
-
-    private touch = (ev: TouchEvent) => {
+    protected onTouch(ev: TouchEvent) {
         ev.preventDefault();
         const newEvt = document.createEvent("MouseEvents");
         const touch = ev.changedTouches[0];
@@ -127,6 +112,22 @@ export class MarkerBase {
             touch.screenX, touch.screenY, touch.clientX, touch.clientY,
             ev.ctrlKey, ev.altKey, ev.shiftKey, ev.metaKey, 0, null);
         ev.target.dispatchEvent(newEvt);
+    }
+
+    private mouseDown = (ev: MouseEvent) => {
+        ev.stopPropagation();
+        this.select();
+        this.isDragging = true;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
+    }
+    private mouseUp = (ev: MouseEvent) => {
+        ev.stopPropagation();
+        this.endManipulation();
+    }
+    private mouseMove = (ev: MouseEvent) => {
+        ev.stopPropagation();
+        this.manipulate(ev);
     }
 
     private move = (dx: number, dy: number) => {

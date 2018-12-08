@@ -106,6 +106,10 @@ export class RectangularMarkerBase extends MarkerBase {
         this.adjustControlBox();
     }
 
+    protected onTouch(ev: TouchEvent) {
+        super.onTouch(ev);
+    }
+
     private addControlBox = () => {
 
         this.controlBox = SvgHelper.createGroup([["class", "markerjs-rect-control-box"]]);
@@ -155,6 +159,10 @@ export class RectangularMarkerBase extends MarkerBase {
         grip.addEventListener("mousemove", this.gripMouseMove);
         grip.addEventListener("mouseup", this.gripMouseUp);
 
+        grip.addEventListener("touchstart", this.onTouch, { passive: false });
+        grip.addEventListener("touchend", this.onTouch, { passive: false });
+        grip.addEventListener("touchmove", this.onTouch, { passive: false });
+
         return grip;
     }
 
@@ -185,6 +193,8 @@ export class RectangularMarkerBase extends MarkerBase {
     private gripMouseDown = (ev: MouseEvent) => {
         this.isResizing = true;
         this.activeGrip = ev.target as SVGGraphicsElement;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         ev.stopPropagation();
     }
 
@@ -196,7 +206,8 @@ export class RectangularMarkerBase extends MarkerBase {
 
     private gripMouseMove = (ev: MouseEvent) => {
         if (this.isResizing) {
-            this.resize(ev.movementX, ev.movementY);
+            this.manipulate(ev);
         }
     }
+
 }

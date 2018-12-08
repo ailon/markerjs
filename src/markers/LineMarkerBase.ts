@@ -112,6 +112,10 @@ export class LineMarkerBase extends MarkerBase {
         grip.addEventListener("mousemove", this.gripMouseMove);
         grip.addEventListener("mouseup", this.gripMouseUp);
 
+        grip.addEventListener("touchstart", this.onTouch, { passive: false });
+        grip.addEventListener("touchend", this.onTouch, { passive: false });
+        grip.addEventListener("touchmove", this.onTouch, { passive: false });
+
         return grip;
     }
 
@@ -134,6 +138,8 @@ export class LineMarkerBase extends MarkerBase {
     private gripMouseDown = (ev: MouseEvent) => {
         this.isResizing = true;
         this.activeGrip = ev.target as SVGGraphicsElement;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         ev.stopPropagation();
     }
 
