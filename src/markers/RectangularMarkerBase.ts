@@ -17,7 +17,7 @@ export class RectangularMarkerBase extends MarkerBase {
 
     private controlGrips: RectangularMarkerGrips;
     private activeGrip: SVGGraphicsElement;
-    private readonly GRIP_SIZE = 8;
+    private readonly GRIP_SIZE = 14;
 
     public endManipulation() {
         super.endManipulation();

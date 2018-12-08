@@ -287,9 +287,9 @@ export class MarkerArea {
             }
             .markerjs-rect-control-box .markerjs-rect-control-grip,
             .markerjs-line-control-box .markerjs-line-control-grip {
-                fill: #333333;
-                stroke: transparent;
-                stroke-width: 5;
+                fill: #cc0000;
+                stroke: #333333;
+                stroke-width: 2;
             }
         `;
 

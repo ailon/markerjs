@@ -19,7 +19,7 @@ export class LineMarkerBase extends MarkerBase {
     private controlGrip1: SVGGraphicsElement;
     private controlGrip2: SVGGraphicsElement;
     private activeGrip: SVGGraphicsElement;
-    private readonly GRIP_SIZE = 8;
+    private readonly GRIP_SIZE = 14;
 
     private x1: number = 0;
     private y1: number = 0;
