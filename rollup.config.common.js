@@ -11,12 +11,20 @@ let leanPkg = Object.assign({}, pkg);
 leanPkg.scripts = {};
 leanPkg.devDependencies = {};
 
+const banner = `/* **********************************
+marker.js version ${pkg.version}
+https://markerjs.com
+
+copyright Alan Mendelevich
+see README.md and LICENSE for details
+********************************** */`;
+
 export default [
     {
         input: 'src/index.ts',
         plugins: [
             del({ targets: 'dist/*' }),
-            typescript({ 
+            typescript({
                 clean: true,
                 useTsconfigDeclarationDir: true,
             }),
@@ -26,8 +34,18 @@ export default [
                 baseContents: leanPkg
             })],
         output: [
-            { file: outputDir + pkg.module, format: 'es' },
-            { file: outputDir + pkg.main, name: pkg.name, format: 'umd' },
+            {
+                file: outputDir + pkg.module,
+                format: 'es',
+                banner: banner,
+            },
+            {
+                file: outputDir + pkg.main,
+                name: pkg.name,
+                format: 'umd',
+                sourcemap: true,
+                banner: banner,
+            },
         ]
     },
     // workaround for terser plugin bug with multiple outputs
@@ -35,7 +53,7 @@ export default [
     {
         input: 'src/index.ts',
         plugins: [
-            typescript({ 
+            typescript({
                 clean: true,
                 useTsconfigDeclarationDir: true,
             }),
@@ -45,7 +63,12 @@ export default [
                 baseContents: leanPkg
             })],
         output: [
-            { file: outputDir + pkg.main, name: pkg.name, format: 'umd' },
+            { 
+                file: outputDir + pkg.main, 
+                name: pkg.name, 
+                format: 'umd',
+                banner: banner
+            },
         ]
     }
 ];
