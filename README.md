@@ -34,7 +34,7 @@ m.show(
 
 You don't have to use marker.js with its built-in toolbar. It's perfectly understandable that often you'd rather integrate annotation functionality into your own UI. And you may also want to limit available marker types according to your requirements.
 
-marker.js has you covered. Instead of calle `MarkerArea.show()` like described above, call `MarkerArea.open()`, then call one of the following methods from your UI to perform whatever action you are after:
+marker.js has you covered. Instead of calling `MarkerArea.show()` like described above, call `MarkerArea.open()`, then call one of the following methods from your UI to perform whatever action you are after:
 
 - `addMarker(markerType)` - call `addMarker` to place a new marker of the `markerType` type into the marker area. Currently supported marker types are: 
     - `ArrowMarker` - arrows, 
