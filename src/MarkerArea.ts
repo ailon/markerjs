@@ -33,8 +33,6 @@ export class MarkerArea {
     private markers: MarkerBase[];
     private activeMarker: MarkerBase;
 
-    private markerAreaBorder: SVGRectElement;
-
     private toolbar: Toolbar;
     private toolbarUI: HTMLElement;
 
@@ -95,12 +93,17 @@ export class MarkerArea {
         this.completeCallback = completeCallback;
         this.cancelCallback = cancelCallback;
 
+        this.open();
+
+        this.showUI();
+    }
+
+    public open = () => {
         this.setTargetRect();
 
         this.initMarkerCanvas();
         this.attachEvents();
         this.setStyles();
-        this.showUI();
         if (!Activator.isLicensed) {
             this.adLogo();
         }
@@ -108,13 +111,55 @@ export class MarkerArea {
         window.addEventListener("resize", this.adjustUI);
     }
 
+    public render = (completeCallback: (dataUrl: string) => void, cancelCallback?: () => void) => {
+        this.completeCallback = completeCallback;
+        this.cancelCallback = cancelCallback;
+
+        this.selectMarker(null);
+        this.startRender(this.renderFinished);
+    }
+
     public close = () => {
-        if (this.toolbarUI && this.markerImage) {
+        if (this.toolbarUI) {
             document.body.removeChild(this.toolbarUI);
+        }
+        if (this.markerImage) {
             document.body.removeChild(this.markerImageHolder);
         }
         if (this.logoUI) {
             document.body.removeChild(this.logoUI);
+        }
+    }
+
+    public addMarker = (markerType: typeof MarkerBase) => {
+        const marker = markerType.createMarker();
+        marker.onSelected = this.selectMarker;
+
+        if (marker.defs && marker.defs.length > 0) {
+            for (const d of marker.defs) {
+                if (d.id && !this.markerImage.getElementById(d.id)) {
+                    this.defs.appendChild(d);
+                }
+            }
+        }
+
+        this.markers.push(marker);
+        this.selectMarker(marker);
+
+        this.markerImage.appendChild(marker.visual);
+
+        const bbox = marker.visual.getBBox();
+        const x = this.width / 2 / this.scale - bbox.width / 2;
+        const y = this.height / 2 / this.scale - bbox.height / 2;
+
+        const translate = marker.visual.transform.baseVal.getItem(0);
+        translate.setMatrix(translate.matrix.translate(x, y));
+        marker.visual.transform.baseVal.replaceItem(translate, 0);
+    }
+
+    public deleteActiveMarker = () => {
+        if (this.activeMarker) {
+            this.deleteMarker(this.activeMarker);
         }
     }
 
@@ -126,7 +171,7 @@ export class MarkerArea {
 
     }
 
-    private render = (done: (dataUrl: string) => void) => {
+    private startRender = (done: (dataUrl: string) => void) => {
         const renderer = new Renderer();
         renderer.rasterize(this.target, this.markerImage, done);
     }
@@ -160,6 +205,7 @@ export class MarkerArea {
 
     private initMarkerCanvas = () => {
         this.markerImageHolder = document.createElement("div");
+        this.markerImageHolder.className = "markerjs-image-holder";
         // fix for Edge's touch behavior
         this.markerImageHolder.style.setProperty("touch-action", "none");
         this.markerImageHolder.style.setProperty("-ms-touch-action", "none");
@@ -171,8 +217,8 @@ export class MarkerArea {
         this.markerImage.setAttribute("viewBox", "0 0 " + this.width.toString() + " " + this.height.toString());
 
         this.markerImageHolder.style.position = "absolute";
-        this.markerImageHolder.style.width = this.width + "px";
-        this.markerImageHolder.style.height = this.height + "px";
+        this.markerImageHolder.style.width = `${this.width - 2}px`;
+        this.markerImageHolder.style.height = `${this.height - 2}px`;
         this.markerImageHolder.style.transformOrigin = "top left";
         this.positionMarkerImage();
 
@@ -230,14 +276,6 @@ export class MarkerArea {
         document.body.appendChild(this.toolbarUI);
         this.toolbarUI.style.position = "absolute";
         this.positionToolbar();
-        this.markerAreaBorder = SvgHelper.createRect(
-            this.width, this.height,
-            [
-                ["fill", "transparent"],
-                ["stroke", "#cccccc"],
-                ["stroke-width", "1"],
-            ]);
-        this.markerImage.appendChild(this.markerAreaBorder);
     }
 
     private setStyles = () => {
@@ -298,37 +336,12 @@ export class MarkerArea {
 
     private toolbarClick = (ev: MouseEvent, toolbarItem: ToolbarItem) => {
         if (toolbarItem.markerType) {
-            const marker = toolbarItem.markerType.createMarker();
-            marker.onSelected = this.selectMarker;
-
-            if (marker.defs && marker.defs.length > 0) {
-                for (const d of marker.defs) {
-                    if (d.id && !this.markerImage.getElementById(d.id)) {
-                        this.defs.appendChild(d);
-                    }
-                }
-            }
-
-            this.markers.push(marker);
-            this.selectMarker(marker);
-
-            this.markerImage.appendChild(marker.visual);
-
-            const bbox = marker.visual.getBBox();
-            const x = this.width / 2 / this.scale - bbox.width / 2;
-            const y = this.height / 2 / this.scale - bbox.height / 2;
-
-            const translate = marker.visual.transform.baseVal.getItem(0);
-            translate.setMatrix(translate.matrix.translate(x, y));
-            marker.visual.transform.baseVal.replaceItem(translate, 0);
-
+            this.addMarker(toolbarItem.markerType);
         } else {
             // command button
             switch (toolbarItem.name) {
                 case "delete": {
-                    if (this.activeMarker) {
-                        this.deleteMarker(this.activeMarker);
-                    }
+                    this.deleteActiveMarker();
                     break;
                 }
                 case "pointer": {
@@ -366,8 +379,7 @@ export class MarkerArea {
 
     private complete = () => {
         this.selectMarker(null);
-        this.markerImage.removeChild(this.markerAreaBorder);
-        this.render(this.renderFinished);
+        this.startRender(this.renderFinishedClose);
     }
 
     private cancel = () => {
@@ -378,6 +390,10 @@ export class MarkerArea {
     }
 
     private renderFinished = (dataUrl: string) => {
+        this.completeCallback(dataUrl);
+    }
+
+    private renderFinishedClose = (dataUrl: string) => {
         this.close();
         this.completeCallback(dataUrl);
     }
