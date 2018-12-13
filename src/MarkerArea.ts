@@ -205,7 +205,6 @@ export class MarkerArea {
 
     private initMarkerCanvas = () => {
         this.markerImageHolder = document.createElement("div");
-        this.markerImageHolder.className = "markerjs-image-holder";
         // fix for Edge's touch behavior
         this.markerImageHolder.style.setProperty("touch-action", "none");
         this.markerImageHolder.style.setProperty("-ms-touch-action", "none");
@@ -217,8 +216,8 @@ export class MarkerArea {
         this.markerImage.setAttribute("viewBox", "0 0 " + this.width.toString() + " " + this.height.toString());
 
         this.markerImageHolder.style.position = "absolute";
-        this.markerImageHolder.style.width = `${this.width - 2}px`;
-        this.markerImageHolder.style.height = `${this.height - 2}px`;
+        this.markerImageHolder.style.width = `${this.width}px`;
+        this.markerImageHolder.style.height = `${this.height}px`;
         this.markerImageHolder.style.transformOrigin = "top left";
         this.positionMarkerImage();
 
