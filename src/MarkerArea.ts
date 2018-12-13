@@ -323,9 +323,8 @@ export class MarkerArea {
                 stroke-dasharray: 3, 2;
                 fill: transparent;
             }
-            .markerjs-rect-control-box .markerjs-rect-control-grip,
-            .markerjs-line-control-box .markerjs-line-control-grip {
-                fill: #cc0000;
+            .markerjs-control-grip {
+                fill: #cccccc;
                 stroke: #333333;
                 stroke-width: 2;
             }

@@ -50,6 +50,22 @@ export class SvgHelper {
         return polygon;
     }
 
+    public static createCircle = (
+        radius: number,
+        attributes?: Array<[string, string]>,
+    ): SVGCircleElement => {
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+        circle.setAttribute("cx", (radius / 2).toString());
+        circle.setAttribute("cy", (radius / 2).toString());
+        circle.setAttribute("r", radius.toString());
+        if (attributes) {
+            SvgHelper.setAttributes(circle, attributes);
+        }
+
+        return circle;
+    }
+
     public static createGroup = (attributes?: Array<[string, string]>): SVGGElement => {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         if (attributes) {

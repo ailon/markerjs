@@ -1,5 +1,6 @@
 import { SvgHelper } from "../helpers/SvgHelper";
 import { MarkerBase } from "./MarkerBase";
+import { ResizeGrip } from "./ResizeGrip";
 
 export class LineMarkerBase extends MarkerBase {
     public static createMarker = (): LineMarkerBase => {
@@ -16,10 +17,9 @@ export class LineMarkerBase extends MarkerBase {
 
     private controlBox: SVGGElement;
 
-    private controlGrip1: SVGGraphicsElement;
-    private controlGrip2: SVGGraphicsElement;
-    private activeGrip: SVGGraphicsElement;
-    private readonly GRIP_SIZE = 14;
+    private controlGrip1: ResizeGrip;
+    private controlGrip2: ResizeGrip;
+    private activeGrip: ResizeGrip;
 
     private x1: number = 0;
     private y1: number = 0;
@@ -103,30 +103,32 @@ export class LineMarkerBase extends MarkerBase {
         this.positionGrips();
     }
 
-    private createGrip = (): SVGGraphicsElement => {
-        const grip = SvgHelper.createRect(this.GRIP_SIZE, this.GRIP_SIZE, [["class", "markerjs-line-control-grip"]]);
-        grip.transform.baseVal.appendItem(SvgHelper.createTransform());
-        this.controlBox.appendChild(grip);
+    private createGrip = (): ResizeGrip => {
+        const grip = new ResizeGrip();
+        grip.visual.transform.baseVal.appendItem(SvgHelper.createTransform());
+        this.controlBox.appendChild(grip.visual);
 
-        grip.addEventListener("mousedown", this.gripMouseDown);
-        grip.addEventListener("mousemove", this.gripMouseMove);
-        grip.addEventListener("mouseup", this.gripMouseUp);
+        grip.visual.addEventListener("mousedown", this.gripMouseDown);
+        grip.visual.addEventListener("mousemove", this.gripMouseMove);
+        grip.visual.addEventListener("mouseup", this.gripMouseUp);
 
-        grip.addEventListener("touchstart", this.onTouch, { passive: false });
-        grip.addEventListener("touchend", this.onTouch, { passive: false });
-        grip.addEventListener("touchmove", this.onTouch, { passive: false });
+        grip.visual.addEventListener("touchstart", this.onTouch, { passive: false });
+        grip.visual.addEventListener("touchend", this.onTouch, { passive: false });
+        grip.visual.addEventListener("touchmove", this.onTouch, { passive: false });
 
         return grip;
     }
 
     private positionGrips = () => {
-        const x1 = this.x1 - this.GRIP_SIZE / 2;
-        const y1 = this.y1 - this.GRIP_SIZE / 2;
-        const x2 = this.x2 - this.GRIP_SIZE / 2;
-        const y2 = this.y2 - this.GRIP_SIZE / 2;
+        const gripSize = this.controlGrip1.GRIP_SIZE;
 
-        this.positionGrip(this.controlGrip1, x1, y1);
-        this.positionGrip(this.controlGrip2, x2, y2);
+        const x1 = this.x1 - gripSize / 2;
+        const y1 = this.y1 - gripSize / 2;
+        const x2 = this.x2 - gripSize / 2;
+        const y2 = this.y2 - gripSize / 2;
+
+        this.positionGrip(this.controlGrip1.visual, x1, y1);
+        this.positionGrip(this.controlGrip2.visual, x2, y2);
     }
 
     private positionGrip = (grip: SVGGraphicsElement, x: number, y: number) => {
@@ -137,7 +139,8 @@ export class LineMarkerBase extends MarkerBase {
 
     private gripMouseDown = (ev: MouseEvent) => {
         this.isResizing = true;
-        this.activeGrip = ev.target as SVGGraphicsElement;
+        this.activeGrip = (ev.target as SVGGraphicsElement) === this.controlGrip1.visual ?
+            this.controlGrip1 : this.controlGrip2;
         this.previousMouseX = ev.screenX;
         this.previousMouseY = ev.screenY;
         ev.stopPropagation();
