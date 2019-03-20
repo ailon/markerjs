@@ -21,7 +21,7 @@ To enable image annotation in your project follow these 3 simple steps:
 ```js
 import { MarkerArea } from 'markerjs';
 
-const m = new MarkerArea(document.getElementById('imageToAnnotate'));
+const m = new MarkerArea(document.getElementById('imageToAnnotate'), document.getElementById('targetElement'));
 m.show(
     (dataUrl) => {
         const res = document.getElementById("resultImage");
@@ -40,7 +40,7 @@ marker.js has you covered. Instead of calling `MarkerArea.show()` like described
     - `ArrowMarker` - arrows, 
     - `CoverMarker` - solid rectangle to cover areas you'd rather not show,
     - `HighlightMarker` - semi-transparent rectangle to highlight areas,
-    - `LineMaker` - lines,
+    - `LineMarker` - lines,
     - `RectMarker` - transparent rectangle with solid border,
     - `TextMarker` - text;
 - `deleteActiveMarker()` - deletes currently selected marker (if any);
@@ -78,7 +78,7 @@ So, our JavaScript code would look something like this:
 let markerArea;
 
 function showApiMarker(img) {
-    markerArea = new markerjs.MarkerArea(img);
+    markerArea = new markerjs.MarkerArea(img, document.getElementById('targetElement'));
     markerArea.open();
     document.getElementById('markerActivator').style.display = 'none';
     document.getElementById('markerControls').style.display = '';
@@ -97,7 +97,7 @@ function deleteMarker() {
 function render() {
     if (markerArea) {
         markerArea.render((dataUrl) => {
-            const res = document.getElementById("resultImage");
+            const res = document.getElementById('resultImage', document.getElementById('targetElement'));
             res.src = dataUrl;
             res.style.display = "";
         });
