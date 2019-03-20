@@ -97,7 +97,7 @@ function deleteMarker() {
 function render() {
     if (markerArea) {
         markerArea.render((dataUrl) => {
-            const res = document.getElementById('resultImage', document.getElementById('targetElement'));
+            const res = document.getElementById('resultImage');
             res.src = dataUrl;
             res.style.display = "";
         });
