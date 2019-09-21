@@ -7,7 +7,7 @@
         "target": "es5",
         "declaration": true,
         "declarationDir": "./dist/typings/",
-        "downlevelIteration": true,
+        "downlevelIteration": true
     },
     "include": [
         "src/**/*"

@@ -24,6 +24,7 @@ import Config from './Config';
 export class MarkerArea {
     private target: HTMLImageElement;
     private targetRoot: HTMLElement;
+    private renderAtNaturalSize: boolean;
     private markerImage: SVGSVGElement;
     private markerImageHolder: HTMLDivElement;
     private defs: SVGDefsElement;
@@ -85,6 +86,7 @@ export class MarkerArea {
     constructor(target: HTMLImageElement, config?: Config) {
         this.target = target;
         this.targetRoot = config && config.targetRoot ? config.targetRoot : document.body;
+        this.renderAtNaturalSize = config && config.renderAtNaturalSize !== undefined ? config.renderAtNaturalSize : false;
         this.width = target.clientWidth;
         this.height = target.clientHeight;
 
@@ -176,7 +178,7 @@ export class MarkerArea {
 
     private startRender = (done: (dataUrl: string) => void) => {
         const renderer = new Renderer();
-        renderer.rasterize(this.target, this.markerImage, done);
+        renderer.rasterize(this.target, this.markerImage, done, this.renderAtNaturalSize);
     }
 
     private attachEvents = () => {

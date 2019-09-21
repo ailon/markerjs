@@ -1,6 +1,13 @@
 export class Renderer {
-    public rasterize(target: HTMLImageElement, markerImage: SVGSVGElement, done: (dataUrl: string) => void) {
+    public rasterize(target: HTMLImageElement, markerImage: SVGSVGElement, done: (dataUrl: string) => void, naturalSize?: boolean) {
         const canvas = document.createElement("canvas");
+
+        if (naturalSize === true) {
+            // scale to full image size
+            markerImage.width.baseVal.value = target.naturalWidth;
+            markerImage.height.baseVal.value = target.naturalHeight;
+        }
+
         canvas.width = markerImage.width.baseVal.value;
         canvas.height = markerImage.height.baseVal.value;
 

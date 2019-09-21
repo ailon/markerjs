@@ -21,7 +21,7 @@
         });
 
         function showMarker(img) {
-            let x = new markerjs.MarkerArea(img);
+            let x = new markerjs.MarkerArea(img, { renderAtNaturalSize: true });
             // markerjs.Activator.key = "AB3-123C-T45";
             x.show((dataUrl) => {
                 const res = document.getElementById("resultImage");
