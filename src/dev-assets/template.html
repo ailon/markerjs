@@ -33,7 +33,7 @@
         let markerArea;
 
         function showApiMarker(img) {
-            markerArea = new markerjs.MarkerArea(img);
+            markerArea = new markerjs.MarkerArea(img, { targetRoot: document.body });
             markerArea.open();
             document.getElementById('markerActivator').style.display = 'none';
             document.getElementById('markerControls').style.display = '';
@@ -72,26 +72,28 @@
 <body>
     <h1>HTML Ipsum Presents</h1>
 
-    <div id="markerActivator">
-        <button onclick="showApiMarker(document.getElementById('bannerImage'));">mark</button>
+    <div style="background-color: antiquewhite; padding: 10px;">
+        <div id="markerActivator">
+            <button onclick="showApiMarker(document.getElementById('bannerImage'));">mark</button>
+        </div>
+
+        <div id="markerControls" style="display: none;">
+            <button onclick="addArrow();">add arrow</button>
+            <button onclick="deleteMarker();">delete marker</button>
+            <button onclick="render();">render</button>
+            <button onclick="closeMarkerArea();">close</button>
+        </div>
+
+        <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas.
+            Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam
+            egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et
+            sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit
+            amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus
+            enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+
+        <img id="bannerImage" crossorigin="anonymous" src="https://tinygoodies.com/ads/images/get-my-book-now-1200x900.jpg"
+            style="max-width: 600px;" alt="img" />
     </div>
-
-    <div id="markerControls" style="display: none;">
-        <button onclick="addArrow();">add arrow</button>
-        <button onclick="deleteMarker();">delete marker</button>
-        <button onclick="render();">render</button>
-        <button onclick="closeMarkerArea();">close</button>
-    </div>
-
-    <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas.
-        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam
-        egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et
-        sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit
-        amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus
-        enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-
-    <img id="bannerImage" crossorigin="anonymous" src="https://tinygoodies.com/ads/images/get-my-book-now-1200x900.jpg"
-        style="max-width: 600px;" alt="img" />
 
     <br /><br />
 

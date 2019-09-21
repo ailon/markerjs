@@ -19,9 +19,11 @@ import PointerIcon from "./assets/core-toolbar-icons/mouse-pointer.svg";
 import CloseIcon from "./assets/core-toolbar-icons/times.svg";
 
 import Logo from "./assets/markerjs-logo-m.svg";
+import Config from './Config';
 
 export class MarkerArea {
     private target: HTMLImageElement;
+    private targetRoot: HTMLElement;
     private markerImage: SVGSVGElement;
     private markerImageHolder: HTMLDivElement;
     private defs: SVGDefsElement;
@@ -80,8 +82,9 @@ export class MarkerArea {
 
     private scale = 1.0;
 
-    constructor(target: HTMLImageElement) {
+    constructor(target: HTMLImageElement, config?: Config) {
         this.target = target;
+        this.targetRoot = config && config.targetRoot ? config.targetRoot : document.body;
         this.width = target.clientWidth;
         this.height = target.clientHeight;
 
@@ -121,13 +124,13 @@ export class MarkerArea {
 
     public close = () => {
         if (this.toolbarUI) {
-            document.body.removeChild(this.toolbarUI);
+            this.targetRoot.removeChild(this.toolbarUI);
         }
         if (this.markerImage) {
-            document.body.removeChild(this.markerImageHolder);
+            this.targetRoot.removeChild(this.markerImageHolder);
         }
         if (this.logoUI) {
-            document.body.removeChild(this.logoUI);
+            this.targetRoot.removeChild(this.logoUI);
         }
     }
 
@@ -165,7 +168,7 @@ export class MarkerArea {
 
     private setTargetRect = () => {
         const targetRect = this.target.getBoundingClientRect() as DOMRect;
-        const bodyRect = document.body.parentElement.getBoundingClientRect();
+        const bodyRect = this.targetRoot.parentElement.getBoundingClientRect();
         this.targetRect = { left: (targetRect.left - bodyRect.left),
             top: (targetRect.top - bodyRect.top) } as ClientRect;
 
@@ -226,7 +229,7 @@ export class MarkerArea {
 
         this.markerImageHolder.appendChild(this.markerImage);
 
-        document.body.appendChild(this.markerImageHolder);
+        this.targetRoot.appendChild(this.markerImageHolder);
     }
 
     private adjustUI = (ev: UIEvent) => {
@@ -272,7 +275,7 @@ export class MarkerArea {
     private showUI = () => {
         this.toolbar = new Toolbar(this.toolbars, this.toolbarClick);
         this.toolbarUI = this.toolbar.getUI();
-        document.body.appendChild(this.toolbarUI);
+        this.targetRoot.appendChild(this.toolbarUI);
         this.toolbarUI.style.position = "absolute";
         this.positionToolbar();
     }
@@ -416,7 +419,7 @@ export class MarkerArea {
 
         this.logoUI.appendChild(link);
 
-        document.body.appendChild(this.logoUI);
+        this.targetRoot.appendChild(this.logoUI);
 
         this.logoUI.style.position = "absolute";
         this.positionLogo();
