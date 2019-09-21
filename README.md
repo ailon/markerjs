@@ -30,6 +30,32 @@ m.show(
 );
 ```
 
+### Additional configuration
+
+Starting with version `1.2` marker.js accepts a second parameter to the `MarkerArea` constructor. You can pass configuration through that object parameter.
+
+Currently supported configuration settings are:
+
+- `targetRoot` - in case your target image is not a child of `document.body` you can specify a different root here,
+- `renderAtNaturalSize` - set to `true` to render the resulting marked image at the native resolution of the source target image,
+- `markerColors` - object with color values for markers:
+    - `mainColor` - main color for most markers (default: #ff0000),
+    - `highlightColor` - color for the `HighlightMarker` - will be displayed semi-transparent,
+    - `coverColor` - color for the `CoverMarker`.
+
+### Example with config
+
+This example sets marker.js to render at original image resolution and chages the main marker color to green.
+
+```js
+const m = new MarkerArea(document.getElementById('imageToAnnotate'), {
+    renderAtNaturalSize: true,
+    markerColors: {
+        mainColor: '#00cc00'
+    }
+});
+```
+
 ## Use with your own UI
 
 You don't have to use marker.js with its built-in toolbar. It's perfectly understandable that often you'd rather integrate annotation functionality into your own UI. And you may also want to limit available marker types according to your requirements.
@@ -40,7 +66,7 @@ marker.js has you covered. Instead of calling `MarkerArea.show()` like described
     - `ArrowMarker` - arrows, 
     - `CoverMarker` - solid rectangle to cover areas you'd rather not show,
     - `HighlightMarker` - semi-transparent rectangle to highlight areas,
-    - `LineMaker` - lines,
+    - `LineMarker` - lines,
     - `RectMarker` - transparent rectangle with solid border,
     - `TextMarker` - text;
 - `deleteActiveMarker()` - deletes currently selected marker (if any);
