@@ -19,12 +19,15 @@ import PointerIcon from "./assets/core-toolbar-icons/mouse-pointer.svg";
 import CloseIcon from "./assets/core-toolbar-icons/times.svg";
 
 import Logo from "./assets/markerjs-logo-m.svg";
-import Config from './Config';
+import Config, { MarkerColors } from './Config';
 
 export class MarkerArea {
     private target: HTMLImageElement;
+
     private targetRoot: HTMLElement;
     private renderAtNaturalSize: boolean;
+    private markerColors: MarkerColors;
+
     private markerImage: SVGSVGElement;
     private markerImageHolder: HTMLDivElement;
     private defs: SVGDefsElement;
@@ -87,6 +90,11 @@ export class MarkerArea {
         this.target = target;
         this.targetRoot = config && config.targetRoot ? config.targetRoot : document.body;
         this.renderAtNaturalSize = config && config.renderAtNaturalSize !== undefined ? config.renderAtNaturalSize : false;
+        this.markerColors = {
+            mainColor: config && config.markerColors && config.markerColors.mainColor ? config.markerColors.mainColor : '#ff0000',
+            highlightColor: config && config.markerColors && config.markerColors.highlightColor ? config.markerColors.highlightColor : '#ffff00',
+            coverColor: config && config.markerColors && config.markerColors.coverColor ? config.markerColors.coverColor : '#000000'
+        };
         this.width = target.clientWidth;
         this.height = target.clientHeight;
 
@@ -286,33 +294,33 @@ export class MarkerArea {
         const editorStyleSheet = document.createElementNS("http://www.w3.org/2000/svg", "style");
         editorStyleSheet.innerHTML = `
             .rect-marker .render-visual {
-                stroke: #ff0000;
+                stroke: ${this.markerColors.mainColor};
                 stroke-width: 3;
                 fill: transparent;
             }
             .cover-marker .render-visual {
                 stroke-width: 0;
-                fill: #000000;
+                fill: ${this.markerColors.coverColor};
             }
             .highlight-marker .render-visual {
                 stroke: transparent;
                 stroke-width: 0;
-                fill: #ffff00;
+                fill: ${this.markerColors.highlightColor};
                 fill-opacity: 0.4;
             }
             .line-marker .render-visual {
-                stroke: #ff0000;
+                stroke: ${this.markerColors.mainColor};
                 stroke-width: 3;
                 fill: transparent;
             }
             .arrow-marker .render-visual {
-                stroke: #ff0000;
+                stroke: ${this.markerColors.mainColor};
                 stroke-width: 3;
                 fill: transparent;
             }
             .arrow-marker-tip {
                 stroke-width: 0;
-                fill: #ff0000;
+                fill: ${this.markerColors.mainColor};
             }
             .text-marker text {
                 fill: #ff0000;

@@ -33,7 +33,10 @@
         let markerArea;
 
         function showApiMarker(img) {
-            markerArea = new markerjs.MarkerArea(img, { targetRoot: document.body });
+            markerArea = new markerjs.MarkerArea(img, { 
+                targetRoot: document.body, 
+                markerColors: { mainColor: '#00cc00' } 
+            });
             markerArea.open();
             document.getElementById('markerActivator').style.display = 'none';
             document.getElementById('markerControls').style.display = '';
