@@ -323,7 +323,7 @@ export class MarkerArea {
                 fill: ${this.markerColors.mainColor};
             }
             .text-marker text {
-                fill: #ff0000;
+                fill: ${this.markerColors.mainColor};
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                     Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
                     "Segoe UI Emoji", "Segoe UI Symbol";
