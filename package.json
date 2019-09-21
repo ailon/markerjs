@@ -1,6 +1,6 @@
 {
   "name": "markerjs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Annotate and mark images",
   "main": "markerjs.umd.js",
   "module": "markerjs.esm.js",
