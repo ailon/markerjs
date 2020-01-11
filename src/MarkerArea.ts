@@ -277,9 +277,11 @@ export class MarkerArea {
     }
 
     private positionToolbar = () => {
-        this.toolbarUI.style.left = `${(this.targetRect.left
-            + this.target.offsetWidth - this.toolbarUI.clientWidth)}px`;
-        this.toolbarUI.style.top = `${this.targetRect.top - this.toolbarUI.clientHeight}px`;
+        if (this.toolbarUI) {
+            this.toolbarUI.style.left = `${(this.targetRect.left
+                + this.target.offsetWidth - this.toolbarUI.clientWidth)}px`;
+            this.toolbarUI.style.top = `${this.targetRect.top - this.toolbarUI.clientHeight}px`;
+        }
     }
 
     private showUI = () => {
