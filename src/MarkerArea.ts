@@ -20,6 +20,7 @@ import CloseIcon from "./assets/core-toolbar-icons/times.svg";
 
 import Logo from "./assets/markerjs-logo-m.svg";
 import Config, { MarkerColors } from './Config';
+import { EllipseMarkerToolbarItem } from './markers/ellipse/EllipseMarkerToolbarItem';
 
 export class MarkerArea {
     private target: HTMLImageElement;
@@ -63,6 +64,7 @@ export class MarkerArea {
             tooltipText: "",
         },
         new RectMarkerToolbarItem(),
+        new EllipseMarkerToolbarItem(),
         new CoverMarkerToolbarItem(),
         new HighlightMarkerToolbarItem(),
         new LineMarkerToolbarItem(),
@@ -329,6 +331,11 @@ export class MarkerArea {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                     Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
                     "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+            .ellipse-marker .render-visual {
+                stroke: ${this.markerColors.mainColor};
+                stroke-width: 3;
+                fill: transparent;
             }
             .markerjs-rect-control-box .markerjs-rect-control-rect {
                 stroke: black;

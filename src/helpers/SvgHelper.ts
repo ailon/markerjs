@@ -66,6 +66,24 @@ export class SvgHelper {
         return circle;
     }
 
+    public static createEllipse = (
+        rx: number,
+        ry: number,
+        attributes?: Array<[string, string]>,
+    ): SVGEllipseElement => {
+        const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+
+        ellipse.setAttribute("cx", (rx / 2).toString());
+        ellipse.setAttribute("cy", (ry / 2).toString());
+        ellipse.setAttribute("rx", (rx / 2).toString());
+        ellipse.setAttribute("ry", (ry / 2).toString());
+        if (attributes) {
+            SvgHelper.setAttributes(ellipse, attributes);
+        }
+
+        return ellipse;
+    }
+
     public static createGroup = (attributes?: Array<[string, string]>): SVGGElement => {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         if (attributes) {
