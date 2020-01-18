@@ -65,6 +65,7 @@ marker.js has you covered. Instead of calling `MarkerArea.show()` like described
 - `addMarker(markerType)` - call `addMarker` to place a new marker of the `markerType` type into the marker area. Currently supported marker types are: 
     - `ArrowMarker` - arrows, 
     - `CoverMarker` - solid rectangle to cover areas you'd rather not show,
+    - `EllipseMarker` (new in v.1.3) - transparent ellipse with solid border,
     - `HighlightMarker` - semi-transparent rectangle to highlight areas,
     - `LineMarker` - lines,
     - `RectMarker` - transparent rectangle with solid border,
