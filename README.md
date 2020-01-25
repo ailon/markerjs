@@ -41,7 +41,9 @@ Currently supported configuration settings are:
 - `markerColors` - object with color values for markers:
     - `mainColor` - main color for most markers (default: #ff0000),
     - `highlightColor` - color for the `HighlightMarker` - will be displayed semi-transparent,
-    - `coverColor` - color for the `CoverMarker`.
+    - `coverColor` - color for the `CoverMarker`,
+- `renderImageType` (new in 1.4) - marker.js renders in PNG by default but you can change this to other MIME type if you like (like "image/jpeg")
+- `renderImageQuality` (new in 1.4) - in a lossy image type (like JPEG) controls image quality (number from 0 to 1).
 
 ### Example with config
 
