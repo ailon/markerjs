@@ -1,5 +1,11 @@
 export class Renderer {
-    public rasterize(target: HTMLImageElement, markerImage: SVGSVGElement, done: (dataUrl: string) => void, naturalSize?: boolean) {
+    public rasterize(
+        target: HTMLImageElement, 
+        markerImage: SVGSVGElement, 
+        done: (dataUrl: string) => void, 
+        naturalSize?: boolean, 
+        imageType?: string, 
+        imageQuality?: number) {
         const canvas = document.createElement("canvas");
 
         if (naturalSize === true) {
@@ -29,7 +35,7 @@ export class Renderer {
             ctx.drawImage(img, 0, 0);
             DOMURL.revokeObjectURL(url);
 
-            done(canvas.toDataURL("image/png"));
+            done(canvas.toDataURL(imageType !== undefined ? imageType : "image/png", imageQuality));
         };
 
         img.src = url;

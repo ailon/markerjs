@@ -28,6 +28,8 @@ export class MarkerArea {
     private targetRoot: HTMLElement;
     private renderAtNaturalSize: boolean;
     private markerColors: MarkerColors;
+    private renderImageType?: string;
+    private renderImageQuality?: number;
 
     private markerImage: SVGSVGElement;
     private markerImageHolder: HTMLDivElement;
@@ -97,6 +99,12 @@ export class MarkerArea {
             highlightColor: config && config.markerColors && config.markerColors.highlightColor ? config.markerColors.highlightColor : '#ffff00',
             coverColor: config && config.markerColors && config.markerColors.coverColor ? config.markerColors.coverColor : '#000000'
         };
+        if (config && config.renderImageType) {
+            this.renderImageType = config.renderImageType;
+        }
+        if (config && config.renderImageQuality) {
+            this.renderImageQuality = config.renderImageQuality;
+        }
         this.width = target.clientWidth;
         this.height = target.clientHeight;
 
@@ -188,7 +196,8 @@ export class MarkerArea {
 
     private startRender = (done: (dataUrl: string) => void) => {
         const renderer = new Renderer();
-        renderer.rasterize(this.target, this.markerImage, done, this.renderAtNaturalSize);
+        renderer.rasterize(this.target, this.markerImage, done, 
+            this.renderAtNaturalSize, this.renderImageType, this.renderImageQuality);
     }
 
     private attachEvents = () => {

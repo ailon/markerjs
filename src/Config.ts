@@ -3,6 +3,8 @@ export default interface Config {
   targetRoot?: HTMLElement; 
   renderAtNaturalSize?: boolean;
   markerColors?: MarkerColors;
+  renderImageType?: string;
+  renderImageQuality?: number;
 }
 
 export interface MarkerColors {
