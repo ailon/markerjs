@@ -5,6 +5,7 @@ export default interface Config {
   markerColors?: MarkerColors;
   renderImageType?: string;
   renderImageQuality?: number;
+  renderMarkersOnly?: boolean
 }
 
 export interface MarkerColors {

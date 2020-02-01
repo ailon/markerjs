@@ -5,7 +5,9 @@ export class Renderer {
         done: (dataUrl: string) => void, 
         naturalSize?: boolean, 
         imageType?: string, 
-        imageQuality?: number) {
+        imageQuality?: number,
+        markersOnly?: boolean
+    ) {
         const canvas = document.createElement("canvas");
 
         if (naturalSize === true) {
@@ -20,7 +22,9 @@ export class Renderer {
         const data = markerImage.outerHTML;
 
         const ctx = canvas.getContext("2d");
-        ctx.drawImage(target, 0, 0, canvas.width, canvas.height);
+        if (markersOnly !== true) { 
+            ctx.drawImage(target, 0, 0, canvas.width, canvas.height);
+        }
 
         const DOMURL = window.URL; // || window.webkitURL || window;
 
