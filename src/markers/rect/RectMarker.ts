@@ -8,6 +8,11 @@ export class RectMarker extends RectMarkerBase {
         return marker;
     }
 
+    constructor() {
+        super();
+        this.markerTypeName = 'RectMarker';
+    }
+
     protected setup() {
         super.setup();
         SvgHelper.setAttributes(this.visual, [["class", "rect-marker"]]);

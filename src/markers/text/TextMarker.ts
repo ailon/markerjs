@@ -3,12 +3,18 @@ import { RectangularMarkerBase } from "../RectangularMarkerBase";
 
 import OkIcon from "./check.svg";
 import CancelIcon from "./times.svg";
+import { TextMarkerState } from './TextMarkerState';
 
 export class TextMarker extends RectangularMarkerBase {
     public static createMarker = (): TextMarker => {
         const marker = new TextMarker();
         marker.setup();
         return marker;
+    }
+
+    constructor() {
+        super();
+        this.markerTypeName = 'TextMarker';
     }
 
     protected readonly MIN_SIZE = 50;
@@ -22,6 +28,18 @@ export class TextMarker extends RectangularMarkerBase {
     private editor: HTMLDivElement;
 
     private editorTextArea: HTMLTextAreaElement;
+
+    public getState(): TextMarkerState {
+        const state: TextMarkerState = Object.assign( 
+            { text: this.text }, super.getState()); 
+        return state;
+    }
+
+    public restoreState(state: TextMarkerState) {
+        this.text = state.text;
+        super.restoreState(state);
+        this.renderText();
+    }
 
     protected setup() {
         super.setup();

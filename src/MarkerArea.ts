@@ -21,6 +21,15 @@ import CloseIcon from "./assets/core-toolbar-icons/times.svg";
 import Logo from "./assets/markerjs-logo-m.svg";
 import Config, { MarkerColors } from './Config';
 import { EllipseMarkerToolbarItem } from './markers/ellipse/EllipseMarkerToolbarItem';
+import { MarkerAreaState } from './MarkerAreaState';
+import { MarkerBaseState } from './markers/MarkerBaseState';
+import { RectMarker } from './markers/rect/RectMarker';
+import { EllipseMarker } from './markers/ellipse/EllipseMarker';
+import { CoverMarker } from './markers/cover/CoverMarker';
+import { HighlightMarker } from './markers/highlight/HighlightMarker';
+import { TextMarker } from './markers/text/TextMarker';
+import { LineMarker } from './markers/line/LineMarker';
+import { ArrowMarker } from './markers/arrow/ArrowMarker';
 
 export class MarkerArea {
     private target: HTMLImageElement;
@@ -31,6 +40,8 @@ export class MarkerArea {
     private renderImageType?: string;
     private renderImageQuality?: number;
     private renderMarkersOnly?: boolean;
+
+    private previousState?: MarkerAreaState;
 
     private markerImage: SVGSVGElement;
     private markerImageHolder: HTMLDivElement;
@@ -48,7 +59,7 @@ export class MarkerArea {
 
     private logoUI: HTMLElement;
 
-    private completeCallback: (dataUrl: string) => void;
+    private completeCallback: (dataUrl: string, state?: MarkerAreaState) => void;
     private cancelCallback: () => void;
 
     private toolbars: ToolbarItem[] = [
@@ -109,6 +120,9 @@ export class MarkerArea {
         if (config && config.renderMarkersOnly) {
             this.renderMarkersOnly = config.renderMarkersOnly;
         }
+        if (config && config.previousState) {
+            this.previousState = config.previousState;
+        }
         this.width = target.clientWidth;
         this.height = target.clientHeight;
 
@@ -116,7 +130,7 @@ export class MarkerArea {
         this.activeMarker = null;
     }
 
-    public show = (completeCallback: (dataUrl: string) => void, cancelCallback?: () => void) => {
+    public show = (completeCallback: (dataUrl: string, state?: MarkerAreaState) => void, cancelCallback?: () => void) => {
         this.completeCallback = completeCallback;
         this.cancelCallback = cancelCallback;
 
@@ -131,6 +145,9 @@ export class MarkerArea {
         this.initMarkerCanvas();
         this.attachEvents();
         this.setStyles();
+        if (this.previousState) {
+            this.restoreState();
+        }
         if (!Activator.isLicensed) {
             this.adLogo();
         }
@@ -138,7 +155,47 @@ export class MarkerArea {
         window.addEventListener("resize", this.adjustUI);
     }
 
-    public render = (completeCallback: (dataUrl: string) => void, cancelCallback?: () => void) => {
+    private restoreState = () => {
+        if (this.previousState) {
+            this.previousState.markers.forEach(markerState => {
+                switch (markerState.markerType) {
+                    case 'RectMarker': {
+                        this.addMarker(RectMarker, markerState);
+                        break;
+                    }
+                    case 'EllipseMarker': {
+                        this.addMarker(EllipseMarker, markerState);
+                        break;
+                    }
+                    case 'CoverMarker': {
+                        this.addMarker(CoverMarker, markerState);
+                        break;
+                    }
+                    case 'HighlightMarker': {
+                        this.addMarker(HighlightMarker, markerState);
+                        break;
+                    }
+                    case 'TextMarker': {
+                        this.addMarker(TextMarker, markerState);
+                        break;
+                    }
+                    case 'LineMarker': {
+                        this.addMarker(LineMarker, markerState);
+                        break;
+                    }
+                    case 'ArrowMarker': {
+                        this.addMarker(ArrowMarker, markerState);
+                        break;
+                    }
+                    default: {
+                        console.log(`missing marker type state handler: ${markerState.markerType}`);
+                    }
+                }
+            })
+        }
+    }
+
+    public render = (completeCallback: (dataUrl: string, state?: MarkerAreaState) => void, cancelCallback?: () => void) => {
         this.completeCallback = completeCallback;
         this.cancelCallback = cancelCallback;
 
@@ -158,7 +215,10 @@ export class MarkerArea {
         }
     }
 
-    public addMarker = (markerType: typeof MarkerBase) => {
+    public addMarker = (
+        markerType: typeof MarkerBase, 
+        previousState?: MarkerBaseState
+    ) => {
         const marker = markerType.createMarker();
         marker.onSelected = this.selectMarker;
 
@@ -169,7 +229,7 @@ export class MarkerArea {
                 }
             }
         }
-
+        
         this.markers.push(marker);
         this.selectMarker(marker);
 
@@ -182,12 +242,21 @@ export class MarkerArea {
         const translate = marker.visual.transform.baseVal.getItem(0);
         translate.setMatrix(translate.matrix.translate(x, y));
         marker.visual.transform.baseVal.replaceItem(translate, 0);
+
+        if (previousState) {
+            marker.restoreState(previousState);
+        }
     }
 
     public deleteActiveMarker = () => {
         if (this.activeMarker) {
             this.deleteMarker(this.activeMarker);
         }
+    }
+
+    public getState = (): MarkerAreaState => {
+        let config = new MarkerAreaState(this.markers);
+        return config;
     }
 
     private setTargetRect = () => {
@@ -423,12 +492,12 @@ export class MarkerArea {
     }
 
     private renderFinished = (dataUrl: string) => {
-        this.completeCallback(dataUrl);
+        this.completeCallback(dataUrl, this.getState());
     }
 
     private renderFinishedClose = (dataUrl: string) => {
         this.close();
-        this.completeCallback(dataUrl);
+        this.completeCallback(dataUrl, this.getState());
     }
 
     private positionLogo = () => {

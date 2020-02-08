@@ -1,4 +1,5 @@
 import { SvgHelper } from "../helpers/SvgHelper";
+import { MarkerBaseState } from './MarkerBaseState';
 
 export class MarkerBase {
     public static createMarker = (): MarkerBase => {
@@ -6,6 +7,8 @@ export class MarkerBase {
         marker.setup();
         return marker;
     }
+
+    public markerTypeName: string = 'MarkerBase';
 
     public visual: SVGGElement;
     public renderVisual: SVGGElement;
@@ -60,6 +63,30 @@ export class MarkerBase {
         this.isActive = false;
         this.endManipulation();
         return;
+    }
+
+    public getState(): MarkerBaseState {
+        const config: MarkerBaseState = {
+            markerType: this.markerTypeName,
+            width: this.width,
+            height: this.height,
+            translateX: this.visual.transform.baseVal.getItem(0).matrix.e,
+            translateY: this.visual.transform.baseVal.getItem(0).matrix.f
+        }
+
+        return config;
+    }
+
+    public restoreState(state: MarkerBaseState) {
+        this.width = state.width;
+        this.height = state.height;
+
+        this.resize(state.width, state.height);
+
+        const translate = this.visual.transform.baseVal.getItem(0);
+        translate.matrix.e = state.translateX;
+        translate.matrix.f = state.translateY;
+        this.visual.transform.baseVal.replaceItem(translate, 0);        
     }
 
     protected setup() {

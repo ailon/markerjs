@@ -8,6 +8,11 @@ export class CoverMarker extends RectMarkerBase {
         return marker;
     }
 
+    constructor() {
+        super();
+        this.markerTypeName = 'CoverMarker';
+    }
+
     protected setup() {
         super.setup();
         SvgHelper.setAttributes(this.visual, [["class", "cover-marker"]]);

@@ -8,6 +8,11 @@ export class LineMarker extends LineMarkerBase {
         return marker;
     }
 
+    constructor() {
+        super();
+        this.markerTypeName = 'LineMarker';
+    }
+
     protected setup() {
         super.setup();
         SvgHelper.setAttributes(this.visual, [["class", "line-marker"]]);

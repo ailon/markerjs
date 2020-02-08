@@ -8,6 +8,11 @@ export class ArrowMarker extends LineMarkerBase {
         return marker;
     }
 
+    constructor() {
+        super();
+        this.markerTypeName = 'ArrowMarker';
+    }    
+
     private readonly ARROW_SIZE = 6;
 
     protected setup() {

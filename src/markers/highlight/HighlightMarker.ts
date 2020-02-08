@@ -8,6 +8,11 @@ export class HighlightMarker extends RectMarkerBase {
         return marker;
     }
 
+    constructor() {
+        super();
+        this.markerTypeName = 'HighlightMarker';
+    }
+
     protected setup() {
         super.setup();
         SvgHelper.setAttributes(this.visual, [["class", "highlight-marker"]]);

@@ -1,6 +1,7 @@
 import { SvgHelper } from "../helpers/SvgHelper";
 import { MarkerBase } from "./MarkerBase";
 import { ResizeGrip } from "./ResizeGrip";
+import { LineMarkerBaseState } from './LineMarkerBaseState';
 
 export class LineMarkerBase extends MarkerBase {
     public static createMarker = (): LineMarkerBase => {
@@ -42,6 +43,28 @@ export class LineMarkerBase extends MarkerBase {
         this.controlBox.style.display = "none";
     }
 
+    public getState(): LineMarkerBaseState {
+        const state: LineMarkerBaseState = Object.assign( 
+            { 
+                x1: this.x1,
+                y1: this.y1,
+                x2: this.x2,
+                y2: this.y2
+            }, 
+            super.getState()
+        ); 
+        return state;
+    }
+
+    public restoreState(state: LineMarkerBaseState) {
+        this.x1 = state.x1;
+        this.y1 = state.y1;
+        this.x2 = state.x2;
+        this.y2 = state.y2;
+        super.restoreState(state);
+        this.adjustLine();
+    }
+
     protected setup() {
         super.setup();
 
@@ -60,23 +83,27 @@ export class LineMarkerBase extends MarkerBase {
                 && this.getLineLength(this.x1 + x, this.y1 + 1, this.x2, this.y2) >= this.MIN_LENGTH) {
                 this.x1 += x;
                 this.y1 += y;
-                this.markerBgLine.setAttribute("x1", this.x1.toString());
-                this.markerBgLine.setAttribute("y1", this.y1.toString());
-                this.markerLine.setAttribute("x1", this.x1.toString());
-                this.markerLine.setAttribute("y1", this.y1.toString());
             } else if (this.activeGrip === this.controlGrip2
                 && this.getLineLength(this.x1, this.y1, this.x2 + x, this.y2 + y) >= this.MIN_LENGTH) {
                 this.x2 += x;
                 this.y2 += y;
-                this.markerBgLine.setAttribute("x2", this.x2.toString());
-                this.markerBgLine.setAttribute("y2", this.y2.toString());
-                this.markerLine.setAttribute("x2", this.x2.toString());
-                this.markerLine.setAttribute("y2", this.y2.toString());
             }
         }
 
+        this.adjustLine();
         this.adjustControlBox();
     }
+
+    protected adjustLine() {
+        this.markerBgLine.setAttribute("x1", this.x1.toString());
+        this.markerBgLine.setAttribute("y1", this.y1.toString());
+        this.markerLine.setAttribute("x1", this.x1.toString());
+        this.markerLine.setAttribute("y1", this.y1.toString());
+        this.markerBgLine.setAttribute("x2", this.x2.toString());
+        this.markerBgLine.setAttribute("y2", this.y2.toString());
+        this.markerLine.setAttribute("x2", this.x2.toString());
+        this.markerLine.setAttribute("y2", this.y2.toString());
+}
 
     private getLineLength = (x1: number, y1: number, x2: number, y2: number): number => {
         const dx = Math.abs(x1 - x2);
