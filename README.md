@@ -44,7 +44,9 @@ Currently supported configuration settings are:
     - `coverColor` - color for the `CoverMarker`,
 - `renderImageType` (new in 1.4) - marker.js renders in PNG by default but you can change this to other MIME type if you like (like "image/jpeg"),
 - `renderImageQuality` (new in 1.4) - in a lossy image type (like JPEG) controls image quality (number from 0 to 1),
-- `renderMarkersOnly` (new in 1.5) - renders the markers layer only (without the original image) when set to `true`. *Note*: make sure `renderImageType` is `image/png` (default) if you want to get transparent background image that can be overlayed on the original.
+- `renderMarkersOnly` (new in 1.5) - renders the markers layer only (without the original image) when set to `true`. *Note*: make sure `renderImageType` is `image/png` (default) if you want to get transparent background image that can be overlayed on the original,
+- `previousState` (new in 1.6) - lets you pass a state from a previous annotation session to continue editing (see "Multi-session example" for details).
+
 
 ### Example with config
 
@@ -142,6 +144,28 @@ function closeMarkerArea() {
 }
 
 ```
+
+## Multi-session example
+
+Starting with version 1.6 you can save and restore the previous annotation session. The state is returned on each render as the second argument to `completeCallback` and then you can pass it back in the config to the constructor of a new `MarkerArea`.
+
+```js
+let savedState;
+
+const m = new MarkerArea(document.getElementById('imageToAnnotate'), {
+    previousState: savedState
+});
+
+m.show(
+    (dataUrl, state) => {
+        const res = document.getElementById("resultImage");
+        res.src = dataUrl;
+        savedState = state;
+    }
+);
+```
+
+This way in every subsequent editing session the state will be restored. You can persist this state in your app as JSON and restore later on.
 
 ## Credits
 
