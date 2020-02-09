@@ -80,20 +80,20 @@ export class LineMarkerBase extends MarkerBase {
     }
 
     protected resize(dx: number, dy: number) {
-        const x1 = this.previousState ? this.previousState.x1 : 0;
-        const y1 = this.previousState ? this.previousState.y1 : 0;
-        const x2 = this.previousState ? this.previousState.x2 : 0;
-        const y2 = this.previousState ? this.previousState.y2 : 0;
+        const previousX1 = this.previousState ? this.previousState.x1 : 0;
+        const previousY1 = this.previousState ? this.previousState.y1 : 0;
+        const previousX2 = this.previousState ? this.previousState.x2 : 0;
+        const previousY2 = this.previousState ? this.previousState.y2 : 0;
 
         if (this.activeGrip) {
             if (this.activeGrip === this.controlGrip1
-                && this.getLineLength(x1 + dx, y1 + 1, x2, y2) >= this.MIN_LENGTH) {
-                this.x1 = x1 + dx;
-                this.y1 = y1 + dy;
+                && this.getLineLength(previousX1 + dx, previousY1 + 1, previousX2, previousY2) >= this.MIN_LENGTH) {
+                this.x1 = previousX1 + dx;
+                this.y1 = previousY1 + dy;
             } else if (this.activeGrip === this.controlGrip2
-                && this.getLineLength(x1, y1, x2 + dx, y2 + dy) >= this.MIN_LENGTH) {
-                this.x2 = x2 + dx;
-                this.y2 = y2 + dy;
+                && this.getLineLength(previousX1, previousY1, previousX2 + dx, previousY2 + dy) >= this.MIN_LENGTH) {
+                this.x2 = previousX2 + dx;
+                this.y2 = previousY2 + dy;
             }
         }
 
