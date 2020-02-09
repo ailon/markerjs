@@ -158,8 +158,11 @@ export class MarkerBase {
     }
 
     private move = (dx: number, dy: number) => {
+        const previousX = this.previousState ? this.previousState.translateX : 0;
+        const previousY = this.previousState ? this.previousState.translateY : 0;
+
         const translate = this.visual.transform.baseVal.getItem(0);
-        translate.setTranslate(this.previousState.translateX + dx, this.previousState.translateY + dy);
+        translate.setTranslate(previousX + dx, previousY + dy);
         this.visual.transform.baseVal.replaceItem(translate, 0);
     }
 }

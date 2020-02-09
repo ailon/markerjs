@@ -80,10 +80,10 @@ export class LineMarkerBase extends MarkerBase {
     }
 
     protected resize(dx: number, dy: number) {
-        const x1 = this.previousState.x1;
-        const y1 = this.previousState.y1;
-        const x2 = this.previousState.x2;
-        const y2 = this.previousState.y2;
+        const x1 = this.previousState ? this.previousState.x1 : 0;
+        const y1 = this.previousState ? this.previousState.y1 : 0;
+        const x2 = this.previousState ? this.previousState.x2 : 0;
+        const y2 = this.previousState ? this.previousState.y2 : 0;
 
         if (this.activeGrip) {
             if (this.activeGrip === this.controlGrip1

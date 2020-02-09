@@ -42,62 +42,65 @@ export class RectangularMarkerBase extends MarkerBase {
     }
 
     protected resize(dx: number, dy: number) {
-        const width = this.previousState.width;
-        const height = this.previousState.height;
-        let translateX = this.previousState.translateX;
-        let translateY = this.previousState.translateY;
+        const previousWidth = this.previousState ? this.previousState.width : 0;
+        const previousHeight = this.previousState ? this.previousState.height : 0;
+        const previousX = this.previousState ? this.previousState.translateX : 0;
+        const previousY = this.previousState ? this.previousState.translateY : 0;
+
+        let translateX = previousX;
+        let translateY = previousY;
 
         switch (this.activeGrip) {
             case this.controlGrips.topLeft:
-                this.width = width - dx;
-                this.height = height - dy;
+                this.width = previousWidth - dx;
+                this.height = previousHeight - dy;
                 translateX += dx;
                 translateY += dy;
                 break;
             case this.controlGrips.bottomLeft:
-                this.width = width - dx;
-                this.height = height + dy;
+                this.width = previousWidth - dx;
+                this.height = previousHeight + dy;
                 translateX += dx;
                 break;
             case this.controlGrips.topRight:
-                this.width = width + dx;
-                this.height = height - dy;
+                this.width = previousWidth + dx;
+                this.height = previousHeight - dy;
                 translateY += dy;
                 break;
             case this.controlGrips.bottomRight:
-                this.width = width + dx;
-                this.height = height + dy;
+                this.width = previousWidth + dx;
+                this.height = previousHeight + dy;
                 break;
             case this.controlGrips.centerLeft:
-                this.width = width - dx;
+                this.width = previousWidth - dx;
                 translateX += dx;
                 break;
             case this.controlGrips.centerRight:
-                this.width = width + dx;
+                this.width = previousWidth + dx;
                 break;
             case this.controlGrips.topCenter:
-                this.height = height - dy;
+                this.height = previousHeight - dy;
                 translateY += dy;
                 break;
             case this.controlGrips.bottomCenter:
-                this.height = height + dy;
+                this.height = previousHeight + dy;
                 break;
         }
 
         if (this.width < this.MIN_SIZE) {
             this.width = this.MIN_SIZE;
-            if (translateX > this.previousState.translateX) {
-                translateX = this.previousState.translateX + width - this.width;
+            if (translateX > previousX) {
+                translateX = previousX + previousWidth - this.width;
             } else {
-                translateX = this.previousState.translateX;
+                translateX = previousX;
             }
         }
         if (this.height < this.MIN_SIZE) {
             this.height = this.MIN_SIZE;
-            if (translateY > this.previousState.translateY) {
-                translateY = this.previousState.translateY + height - this.height;
+            if (translateY > previousY) {
+                translateY = previousY + previousHeight - this.height;
             } else {
-                translateY = this.previousState.translateY;
+                translateY = previousY;
             }
         }
 
