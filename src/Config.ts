@@ -5,6 +5,7 @@ export default interface Config {
   targetRoot?: HTMLElement; 
   renderAtNaturalSize?: boolean;
   markerColors?: MarkerColors;
+  strokeWidth?: number;
   renderImageType?: string;
   renderImageQuality?: number;
   renderMarkersOnly?: boolean;

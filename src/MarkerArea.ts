@@ -37,6 +37,7 @@ export class MarkerArea {
     private targetRoot: HTMLElement;
     private renderAtNaturalSize: boolean;
     private markerColors: MarkerColors;
+    private strokeWidth: number;
     private renderImageType?: string;
     private renderImageQuality?: number;
     private renderMarkersOnly?: boolean;
@@ -111,6 +112,7 @@ export class MarkerArea {
             highlightColor: config && config.markerColors && config.markerColors.highlightColor ? config.markerColors.highlightColor : '#ffff00',
             coverColor: config && config.markerColors && config.markerColors.coverColor ? config.markerColors.coverColor : '#000000'
         };
+        this.strokeWidth = config && config.strokeWidth ? config.strokeWidth : 3;
         if (config && config.renderImageType) {
             this.renderImageType = config.renderImageType;
         }
@@ -381,7 +383,7 @@ export class MarkerArea {
         editorStyleSheet.innerHTML = `
             .rect-marker .render-visual {
                 stroke: ${this.markerColors.mainColor};
-                stroke-width: 3;
+                stroke-width: ${this.strokeWidth};
                 fill: transparent;
             }
             .cover-marker .render-visual {
@@ -396,12 +398,12 @@ export class MarkerArea {
             }
             .line-marker .render-visual {
                 stroke: ${this.markerColors.mainColor};
-                stroke-width: 3;
+                stroke-width: ${this.strokeWidth};
                 fill: transparent;
             }
             .arrow-marker .render-visual {
                 stroke: ${this.markerColors.mainColor};
-                stroke-width: 3;
+                stroke-width: ${this.strokeWidth};
                 fill: transparent;
             }
             .arrow-marker-tip {
@@ -416,7 +418,7 @@ export class MarkerArea {
             }
             .ellipse-marker .render-visual {
                 stroke: ${this.markerColors.mainColor};
-                stroke-width: 3;
+                stroke-width: ${this.strokeWidth};
                 fill: transparent;
             }
             .markerjs-rect-control-box .markerjs-rect-control-rect {
