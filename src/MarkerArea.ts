@@ -151,7 +151,7 @@ export class MarkerArea {
             this.restoreState();
         }
         if (!Activator.isLicensed) {
-            this.adLogo();
+            this.addLogo();
         }
 
         window.addEventListener("resize", this.adjustUI);
@@ -510,7 +510,7 @@ export class MarkerArea {
         }
     }
 
-    private adLogo = () => {
+    private addLogo = () => {
         this.logoUI = document.createElement("div");
         this.logoUI.className = "markerjs-logo";
 
