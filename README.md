@@ -42,6 +42,7 @@ Currently supported configuration settings are:
     - `mainColor` - main color for most markers (default: #ff0000),
     - `highlightColor` - color for the `HighlightMarker` - will be displayed semi-transparent,
     - `coverColor` - color for the `CoverMarker`,
+- `strokeWidth` (new in 1.7) - set width of the stroke (line) on rectangular, ellipse and line markers (default: 3);
 - `renderImageType` (new in 1.4) - marker.js renders in PNG by default but you can change this to other MIME type if you like (like "image/jpeg"),
 - `renderImageQuality` (new in 1.4) - in a lossy image type (like JPEG) controls image quality (number from 0 to 1),
 - `renderMarkersOnly` (new in 1.5) - renders the markers layer only (without the original image) when set to `true`. *Note*: make sure `renderImageType` is `image/png` (default) if you want to get transparent background image that can be overlayed on the original,
