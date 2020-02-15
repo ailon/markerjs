@@ -1,4 +1,4 @@
-import { SvgHelper } from "./../helpers/SvgHelper";
+import { SvgHelper } from "../helpers/SvgHelper";
 import { MarkerBase } from "./MarkerBase";
 import { RectangularMarkerGrips } from "./RectangularMarkerGrips";
 import { ResizeGrip } from "./ResizeGrip";
@@ -41,72 +41,65 @@ export class RectangularMarkerBase extends MarkerBase {
         this.addControlBox();
     }
 
-    protected resize(dx: number, dy: number) {
-        const previousWidth = this.previousState ? this.previousState.width : 0;
-        const previousHeight = this.previousState ? this.previousState.height : 0;
-        const previousX = this.previousState ? this.previousState.translateX : 0;
-        const previousY = this.previousState ? this.previousState.translateY : 0;
-
-        let translateX = previousX;
-        let translateY = previousY;
+    protected resize(x: number, y: number) {
+        let translateX = 0;
+        let translateY = 0;
 
         switch (this.activeGrip) {
             case this.controlGrips.topLeft:
-                this.width = previousWidth - dx;
-                this.height = previousHeight - dy;
-                translateX += dx;
-                translateY += dy;
+                this.width -= x;
+                this.height -= y;
+                translateX += x;
+                translateY += y;
                 break;
             case this.controlGrips.bottomLeft:
-                this.width = previousWidth - dx;
-                this.height = previousHeight + dy;
-                translateX += dx;
+                this.width -= x;
+                this.height += y;
+                translateX += x;
                 break;
             case this.controlGrips.topRight:
-                this.width = previousWidth + dx;
-                this.height = previousHeight - dy;
-                translateY += dy;
+                this.width += x;
+                this.height -= y;
+                translateY += y;
                 break;
             case this.controlGrips.bottomRight:
-                this.width = previousWidth + dx;
-                this.height = previousHeight + dy;
+                this.width += x;
+                this.height += y;
                 break;
             case this.controlGrips.centerLeft:
-                this.width = previousWidth - dx;
-                translateX += dx;
+                this.width -= x;
+                translateX += x;
                 break;
             case this.controlGrips.centerRight:
-                this.width = previousWidth + dx;
+                this.width += x;
                 break;
             case this.controlGrips.topCenter:
-                this.height = previousHeight - dy;
-                translateY += dy;
+                this.height -= y;
+                translateY += y;
                 break;
             case this.controlGrips.bottomCenter:
-                this.height = previousHeight + dy;
+                this.height += y;
                 break;
         }
 
         if (this.width < this.MIN_SIZE) {
+            const offset = this.MIN_SIZE - this.width;
             this.width = this.MIN_SIZE;
-            if (translateX > previousX) {
-                translateX = previousX + previousWidth - this.width;
-            } else {
-                translateX = previousX;
+            if (translateX !== 0) {
+                translateX -= offset;
             }
         }
         if (this.height < this.MIN_SIZE) {
+            const offset = this.MIN_SIZE - this.height;
             this.height = this.MIN_SIZE;
-            if (translateY > previousY) {
-                translateY = previousY + previousHeight - this.height;
-            } else {
-                translateY = previousY;
+            if (translateY !== 0) {
+                translateY -= offset;
             }
         }
 
         if (translateX !== 0 || translateY !== 0) {
             const translate = this.visual.transform.baseVal.getItem(0);
-            translate.setTranslate(translateX, translateY);
+            translate.setMatrix(translate.matrix.translate(translateX, translateY));
             this.visual.transform.baseVal.replaceItem(translate, 0);
         }
 
@@ -202,14 +195,13 @@ export class RectangularMarkerBase extends MarkerBase {
     private gripMouseDown = (ev: MouseEvent) => {
         this.isResizing = true;
         this.activeGrip = this.controlGrips.findGripByVisual(ev.target as SVGGraphicsElement);
-        this.previousMouseX = ev.offsetX;
-        this.previousMouseY = ev.offsetY;
-        this.previousState = this.getState();
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         ev.stopPropagation();
     }
 
     private gripMouseUp = (ev: MouseEvent) => {
-        this.endManipulation();
+        this.isResizing = false;
         this.activeGrip = null;
         ev.stopPropagation();
     }

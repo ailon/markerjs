@@ -1,7 +1,7 @@
-import { SvgHelper } from "./../helpers/SvgHelper";
-import { LineMarkerBaseState } from "./LineMarkerBaseState";
+import { SvgHelper } from "../helpers/SvgHelper";
 import { MarkerBase } from "./MarkerBase";
 import { ResizeGrip } from "./ResizeGrip";
+import { LineMarkerBaseState } from './LineMarkerBaseState';
 
 export class LineMarkerBase extends MarkerBase {
     public static createMarker = (): LineMarkerBase => {
@@ -11,8 +11,6 @@ export class LineMarkerBase extends MarkerBase {
     }
 
     protected markerLine: SVGLineElement;
-
-    protected previousState: LineMarkerBaseState;
 
     private readonly MIN_LENGTH = 20;
 
@@ -46,15 +44,15 @@ export class LineMarkerBase extends MarkerBase {
     }
 
     public getState(): LineMarkerBaseState {
-        const state: LineMarkerBaseState = Object.assign(
-            {
+        const state: LineMarkerBaseState = Object.assign( 
+            { 
                 x1: this.x1,
                 y1: this.y1,
                 x2: this.x2,
-                y2: this.y2,
-            },
-            super.getState(),
-        );
+                y2: this.y2
+            }, 
+            super.getState()
+        ); 
         return state;
     }
 
@@ -79,21 +77,16 @@ export class LineMarkerBase extends MarkerBase {
         this.addControlBox();
     }
 
-    protected resize(dx: number, dy: number) {
-        const previousX1 = this.previousState ? this.previousState.x1 : 0;
-        const previousY1 = this.previousState ? this.previousState.y1 : 0;
-        const previousX2 = this.previousState ? this.previousState.x2 : 0;
-        const previousY2 = this.previousState ? this.previousState.y2 : 0;
-
+    protected resize(x: number, y: number) {
         if (this.activeGrip) {
             if (this.activeGrip === this.controlGrip1
-                && this.getLineLength(previousX1 + dx, previousY1 + 1, previousX2, previousY2) >= this.MIN_LENGTH) {
-                this.x1 = previousX1 + dx;
-                this.y1 = previousY1 + dy;
+                && this.getLineLength(this.x1 + x, this.y1 + 1, this.x2, this.y2) >= this.MIN_LENGTH) {
+                this.x1 += x;
+                this.y1 += y;
             } else if (this.activeGrip === this.controlGrip2
-                && this.getLineLength(previousX1, previousY1, previousX2 + dx, previousY2 + dy) >= this.MIN_LENGTH) {
-                this.x2 = previousX2 + dx;
-                this.y2 = previousY2 + dy;
+                && this.getLineLength(this.x1, this.y1, this.x2 + x, this.y2 + y) >= this.MIN_LENGTH) {
+                this.x2 += x;
+                this.y2 += y;
             }
         }
 
@@ -175,21 +168,20 @@ export class LineMarkerBase extends MarkerBase {
         this.isResizing = true;
         this.activeGrip = (ev.target as SVGGraphicsElement) === this.controlGrip1.visual ?
             this.controlGrip1 : this.controlGrip2;
-        this.previousMouseX = ev.offsetX;
-        this.previousMouseY = ev.offsetY;
-        this.previousState = this.getState();
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         ev.stopPropagation();
     }
 
     private gripMouseUp = (ev: MouseEvent) => {
-        this.endManipulation();
+        this.isResizing = false;
         this.activeGrip = null;
         ev.stopPropagation();
     }
 
     private gripMouseMove = (ev: MouseEvent) => {
         if (this.isResizing) {
-            this.manipulate(ev);
+            this.resize(ev.movementX, ev.movementY);
         }
     }
 }

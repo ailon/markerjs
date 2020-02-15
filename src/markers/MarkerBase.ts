@@ -1,5 +1,5 @@
 import { SvgHelper } from "../helpers/SvgHelper";
-import { MarkerBaseState } from "./MarkerBaseState";
+import { MarkerBaseState } from './MarkerBaseState';
 
 export class MarkerBase {
     public static createMarker = (): MarkerBase => {
@@ -8,7 +8,7 @@ export class MarkerBase {
         return marker;
     }
 
-    public markerTypeName: string = "MarkerBase";
+    public markerTypeName: string = 'MarkerBase';
 
     public visual: SVGGElement;
     public renderVisual: SVGGElement;
@@ -26,16 +26,15 @@ export class MarkerBase {
     protected previousMouseX: number = 0;
     protected previousMouseY: number = 0;
 
-    protected previousState: MarkerBaseState;
-
     private isDragging: boolean = false;
 
     // constructor() {
     // }
 
     public manipulate = (ev: MouseEvent) => {
-        const dx = ev.offsetX - this.previousMouseX;
-        const dy = ev.offsetY - this.previousMouseY;
+        const scale = this.visual.getScreenCTM().a;
+        const dx = (ev.screenX - this.previousMouseX) / scale;
+        const dy = (ev.screenY - this.previousMouseY) / scale;
 
         if (this.isDragging) {
             this.move(dx, dy);
@@ -43,6 +42,8 @@ export class MarkerBase {
         if (this.isResizing) {
             this.resize(dx, dy);
         }
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
     }
 
     public endManipulation() {
@@ -70,8 +71,8 @@ export class MarkerBase {
             width: this.width,
             height: this.height,
             translateX: this.visual.transform.baseVal.getItem(0).matrix.e,
-            translateY: this.visual.transform.baseVal.getItem(0).matrix.f,
-        };
+            translateY: this.visual.transform.baseVal.getItem(0).matrix.f
+        }
 
         return config;
     }
@@ -85,7 +86,7 @@ export class MarkerBase {
         const translate = this.visual.transform.baseVal.getItem(0);
         translate.matrix.e = state.translateX;
         translate.matrix.f = state.translateY;
-        this.visual.transform.baseVal.replaceItem(translate, 0);
+        this.visual.transform.baseVal.replaceItem(translate, 0);        
     }
 
     protected setup() {
@@ -144,9 +145,8 @@ export class MarkerBase {
         ev.stopPropagation();
         this.select();
         this.isDragging = true;
-        this.previousMouseX = ev.offsetX;
-        this.previousMouseY = ev.offsetY;
-        this.previousState = this.getState();
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
     }
     private mouseUp = (ev: MouseEvent) => {
         ev.stopPropagation();
@@ -158,11 +158,8 @@ export class MarkerBase {
     }
 
     private move = (dx: number, dy: number) => {
-        const previousX = this.previousState ? this.previousState.translateX : 0;
-        const previousY = this.previousState ? this.previousState.translateY : 0;
-
         const translate = this.visual.transform.baseVal.getItem(0);
-        translate.setTranslate(previousX + dx, previousY + dy);
+        translate.setMatrix(translate.matrix.translate(dx, dy));
         this.visual.transform.baseVal.replaceItem(translate, 0);
     }
 }
