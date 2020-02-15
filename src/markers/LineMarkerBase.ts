@@ -175,8 +175,8 @@ export class LineMarkerBase extends MarkerBase {
         this.isResizing = true;
         this.activeGrip = (ev.target as SVGGraphicsElement) === this.controlGrip1.visual ?
             this.controlGrip1 : this.controlGrip2;
-        this.previousMouseX = ev.offsetX;
-        this.previousMouseY = ev.offsetY;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         this.previousState = this.getState();
         ev.stopPropagation();
     }

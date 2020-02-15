@@ -34,8 +34,25 @@ export class MarkerBase {
     // }
 
     public manipulate = (ev: MouseEvent) => {
-        const dx = ev.offsetX - this.previousMouseX;
-        const dy = ev.offsetY - this.previousMouseY;
+        let scale: number;
+        // Prefer getting the scale from the markerArea
+        const markerArea = this.visual.closest("div");
+        if (markerArea && markerArea.style) {
+            const transform = markerArea.style.transform;
+            if (transform && transform.includes("scale(")) {
+                scale = parseFloat(transform.replace("scale(", "").replace(")", ""));
+            }
+        }
+        if (!scale) {
+            // As fallback try to get scale from getScreenCTM
+            // because on Firefox it always returns 1, see http://jsfiddle.net/ps_svg/4x73N/
+            scale = this.visual.getScreenCTM().a || 1;
+        }
+
+        // Prefer screenX (over offsetX) as it works also in Firefox
+        // Apply scale in case the markerArea was resized
+        const dx = (ev.screenX - this.previousMouseX) / scale;
+        const dy = (ev.screenY - this.previousMouseY) / scale;
 
         if (this.isDragging) {
             this.move(dx, dy);
@@ -144,8 +161,8 @@ export class MarkerBase {
         ev.stopPropagation();
         this.select();
         this.isDragging = true;
-        this.previousMouseX = ev.offsetX;
-        this.previousMouseY = ev.offsetY;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         this.previousState = this.getState();
     }
     private mouseUp = (ev: MouseEvent) => {

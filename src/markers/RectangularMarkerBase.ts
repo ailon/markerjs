@@ -202,8 +202,8 @@ export class RectangularMarkerBase extends MarkerBase {
     private gripMouseDown = (ev: MouseEvent) => {
         this.isResizing = true;
         this.activeGrip = this.controlGrips.findGripByVisual(ev.target as SVGGraphicsElement);
-        this.previousMouseX = ev.offsetX;
-        this.previousMouseY = ev.offsetY;
+        this.previousMouseX = ev.screenX;
+        this.previousMouseY = ev.screenY;
         this.previousState = this.getState();
         ev.stopPropagation();
     }
