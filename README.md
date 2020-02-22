@@ -173,6 +173,7 @@ This way in every subsequent editing session the state will be restored. You can
 marker.js is using [Font Awesome Free](https://fontawesome.com) icons for the toolbar UI.
 
 ## License
-Linkware (see [LICENSE](https://github.com/ailon/markerjs/blob/master/LICENSE) for details) - the UI displays a small link back to the marker.js website which should be retained. Alternative license options are coming soon.
 
-Alternative licenses are available through the [marker.js website](https://markerjs.com).
+Since version 1.8 marker.js is released under the [MIT license](https://github.com/ailon/markerjs/blob/master/LICENSE).
+
+The annotation UI includes a small logo back to [marker.js website](https://markerjs.com). You can find instructions on how to remove it [here](https://markerjs.com/#price).

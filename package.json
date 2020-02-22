@@ -25,7 +25,7 @@
     "comment"
   ],
   "author": "Alan Mendelevich",
-  "license": "Linkware (see LICENSE)",
+  "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
