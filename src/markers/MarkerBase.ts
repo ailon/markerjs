@@ -1,5 +1,5 @@
 import { SvgHelper } from "../helpers/SvgHelper";
-import { MarkerBaseState } from './MarkerBaseState';
+import { MarkerBaseState } from "./MarkerBaseState";
 
 export class MarkerBase {
     public static createMarker = (): MarkerBase => {
@@ -8,7 +8,7 @@ export class MarkerBase {
         return marker;
     }
 
-    public markerTypeName: string = 'MarkerBase';
+    public markerTypeName: string = "MarkerBase";
 
     public visual: SVGGElement;
     public renderVisual: SVGGElement;
@@ -26,13 +26,31 @@ export class MarkerBase {
     protected previousMouseX: number = 0;
     protected previousMouseY: number = 0;
 
+    protected previousState: MarkerBaseState;
+
     private isDragging: boolean = false;
 
     // constructor() {
     // }
 
     public manipulate = (ev: MouseEvent) => {
-        const scale = this.visual.getScreenCTM().a;
+        let scale: number;
+        // Prefer getting the scale from the markerArea
+        const markerArea = this.visual.closest("div");
+        if (markerArea && markerArea.style) {
+            const transform = markerArea.style.transform;
+            if (transform && transform.includes("scale(")) {
+                scale = parseFloat(transform.replace("scale(", "").replace(")", ""));
+            }
+        }
+        if (!scale) {
+            // As fallback try to get scale from getScreenCTM
+            // because on Firefox it always returns 1, see http://jsfiddle.net/ps_svg/4x73N/
+            scale = this.visual.getScreenCTM().a || 1;
+        }
+
+        // Prefer screenX (over offsetX) as it works also in Firefox
+        // Apply scale in case the markerArea was resized
         const dx = (ev.screenX - this.previousMouseX) / scale;
         const dy = (ev.screenY - this.previousMouseY) / scale;
 
@@ -42,8 +60,6 @@ export class MarkerBase {
         if (this.isResizing) {
             this.resize(dx, dy);
         }
-        this.previousMouseX = ev.screenX;
-        this.previousMouseY = ev.screenY;
     }
 
     public endManipulation() {
@@ -71,8 +87,8 @@ export class MarkerBase {
             width: this.width,
             height: this.height,
             translateX: this.visual.transform.baseVal.getItem(0).matrix.e,
-            translateY: this.visual.transform.baseVal.getItem(0).matrix.f
-        }
+            translateY: this.visual.transform.baseVal.getItem(0).matrix.f,
+        };
 
         return config;
     }
@@ -86,7 +102,7 @@ export class MarkerBase {
         const translate = this.visual.transform.baseVal.getItem(0);
         translate.matrix.e = state.translateX;
         translate.matrix.f = state.translateY;
-        this.visual.transform.baseVal.replaceItem(translate, 0);        
+        this.visual.transform.baseVal.replaceItem(translate, 0);
     }
 
     protected setup() {
@@ -147,6 +163,7 @@ export class MarkerBase {
         this.isDragging = true;
         this.previousMouseX = ev.screenX;
         this.previousMouseY = ev.screenY;
+        this.previousState = this.getState();
     }
     private mouseUp = (ev: MouseEvent) => {
         ev.stopPropagation();
@@ -158,8 +175,11 @@ export class MarkerBase {
     }
 
     private move = (dx: number, dy: number) => {
+        const previousX = this.previousState ? this.previousState.translateX : 0;
+        const previousY = this.previousState ? this.previousState.translateY : 0;
+
         const translate = this.visual.transform.baseVal.getItem(0);
-        translate.setMatrix(translate.matrix.translate(dx, dy));
+        translate.setTranslate(previousX + dx, previousY + dy);
         this.visual.transform.baseVal.replaceItem(translate, 0);
     }
 }

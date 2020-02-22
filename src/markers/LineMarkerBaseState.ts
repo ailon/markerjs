@@ -1,4 +1,4 @@
-import { MarkerBaseState } from './MarkerBaseState';
+import { MarkerBaseState } from "./MarkerBaseState";
 
 export interface LineMarkerBaseState extends MarkerBaseState {
   x1: number;
