@@ -151,6 +151,11 @@ export class MarkerArea {
             this.restoreState();
         }
         if (!Activator.isLicensed) {
+            
+            // NOTE: 
+            // before removing this call please consider supporting marker.js
+            // by visiting https://markerjs.com/#price for details
+            // thank you!
             this.addLogo();
         }
 
@@ -510,6 +515,14 @@ export class MarkerArea {
         }
     }
 
+    /**
+     * NOTE: 
+     * 
+     * before removing or modifying this method please consider supporting marker.js
+     * by visiting https://markerjs.com/#price for details
+     * 
+     * thank you!
+     */
     private addLogo = () => {
         this.logoUI = document.createElement("div");
         this.logoUI.className = "markerjs-logo";
