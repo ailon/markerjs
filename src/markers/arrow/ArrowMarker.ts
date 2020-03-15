@@ -24,7 +24,7 @@ export class ArrowMarker extends LineMarkerBase {
         this.defs.push(SvgHelper.createMarker("arrow-marker-head", "auto",
             this.ARROW_SIZE, this.ARROW_SIZE, this.ARROW_SIZE - 1, this.ARROW_SIZE / 2, tip));
 
-        this.markerLine.setAttribute("marker-end", "url(#arrow-marker-head");
+        this.markerLine.setAttribute("marker-end", "url(#arrow-marker-head)");
     }
 
 }
