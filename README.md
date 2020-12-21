@@ -1,5 +1,9 @@
 # marker.js &mdash; Let your users annotate and mark images
 
+> :warning: DEPRECATED. 
+>
+> marker.js v.1.x is no longer maintained. Please consider using [marker.js 2](https://www.npmjs.com/package/markerjs2) instead.
+
 marker.js is a JavaScript library to enable image annotation in your web projects. Users can annotate and mark up images, and you can save, share or otherwise process the results.
 
 ## Installation
