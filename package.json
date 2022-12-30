@@ -30,7 +30,7 @@
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
-    "mocha": "^6.2.2",
+    "mocha": "^10.2.0",
     "rollup": "^1.29.0",
     "rollup-plugin-cpy": "^2.0.1",
     "rollup-plugin-delete": "^1.1.0",
